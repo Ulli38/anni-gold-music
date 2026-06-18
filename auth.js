@@ -88,7 +88,7 @@ if (forgotPasswordForm) {
         status.textContent = "Reset-Link wird gesendet...";
 
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-            redirectTo: "https://anni-gold-music.netlify.app/login.html"
+           redirectTo: "https://ulli38.github.io/anni-gold-music/reset.html"
         });
 
         if (error) {
