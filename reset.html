@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passwort vergessen</title>
+  <link rel="stylesheet" href="style.css" />
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+</head>
+<body>
+ <div class="left-decoration">
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol clef">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+</div>
+
+<div class="right-decoration">
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol clef">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+</div> 
+  <main class="container">
+
+    <header>
+     <header class="upload-header">
+  <div class="logo-area">
+    <div class="logo-title">
+      <span class="logo-icon">𝄞</span> ANNI GOLD MUSIC
+    </div>
+    <div class="logo-subtitle">
+      Deine Musik. Deine Bühne. Dein Moment.
+    </div>
+  </div>
+<h1><span class="gold-icon">🔑</span> Passwort vergessen</h1>
+<p>Gib deine E-Mail-Adresse ein. Wir senden dir einen Link, mit dem du dein Passwort ganz einfach zurücksetzen kannst.</p>
+    <form id="forgotPasswortForm"  class="card">
+
+  
+
+ <label>E-Mail</label>
+<input type="email" id="email" placeholder="deine@email.de">
+
+
+<button type="button" onclick="passwortResetSenden()">
+  Link zum Zurücksetzen senden
+</button>
+
+<p class="form-link">
+<a href="login.html">← Zur Anmeldung</a>
+</p>
+
+<div id="status" class="status"></div>
+
+  </form>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+
+</body>
+</html>

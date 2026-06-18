@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anmeldung</title>
+  <link rel="stylesheet" href="style.css" />
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+</head>
+<body>
+ <div class="left-decoration">
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol clef">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+</div>
+
+<div class="right-decoration">
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol clef">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+</div> 
+  <main class="container">
+    <header>
+     <header class="upload-header">
+  <div class="logo-area">
+    <div class="logo-title">
+      <span class="logo-icon">𝄞</span> ANNI GOLD MUSIC
+    </div>
+    <div class="logo-subtitle">
+      Deine Musik. Deine Bühne. Dein Moment.
+    </div>
+  </div>
+<p>
+<h1><span class="gold-icon">🔐</span> Anmeldung</h1>
+<p>Melde dich mit deinem Künstlerkonto an.</p>
+  <form id="loginForm" class="card">
+
+    <label>Benutzername oder E-Mail</label>
+    <input
+        type="text"
+        id="loginEmail"
+        placeholder="Benutzername oder E-Mail">
+
+    <label>Passwort</label>
+
+    <div class="password-box">
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Passwort eingeben">
+
+        <span
+            class="toggle-password"
+            onclick="togglePassword('loginPassword', this)">👁</span>
+    </div>
+
+    <button type="submit">
+        Anmelden
+    </button>
+
+    <p class="form-link">
+       
+         <a href="reset.html">🔑 Passwort vergessen?</a>
+    </p>
+
+    <p class="form-link">
+        Noch kein Konto?
+        <a href="register.html">
+            Jetzt registrieren
+        </a>
+    </p>
+
+    <div id="status" class="status"></div>
+
+</form>
+   
+    
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+  <script>
+function togglePassword(id, icon){
+    const input=document.getElementById(id);
+
+    if(input.type==="password"){
+        input.type="text";
+        icon.textContent="🙈";
+    }else{
+        input.type="password";
+        icon.textContent="👁";
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrierung</title>
+  <link rel="stylesheet" href="style.css" />
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+</head>
+<body>
+ <div class="left-decoration">
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol clef">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+</div>
+
+<div class="right-decoration">
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol clef">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+</div> 
+  <main class="container">
+    <header>
+     <header class="upload-header">
+  <div class="logo-area">
+    <div class="logo-title">
+      <span class="logo-icon">𝄞</span> ANNI GOLD MUSIC
+    </div>
+    <div class="logo-subtitle">
+      Deine Musik. Deine Bühne. Dein Moment.
+    </div>
+  </div>
+<p>
+<h1><span class="gold-icon">👤</span>Registrierung</h1>
+<p>Erstelle jetzt dein kostenloses Künstlerkonto bei Anni Gold Music</p>
+
+   <form id="registerForm" class="card">
+
+<label>Künstlername</label>
+<input type="text" id="artistName" placeholder="Artist Name" required>
+
+<label>Benutzername</label>
+<input type="text" id="username" placeholder="Dein Benutzername" required>
+
+<label>E-Mail</label>
+<input type="email" id="email" placeholder="deine@email.de" required>
+
+<label>Passwort</label>
+<div class="password-wrapper">
+    <input type="password" id="password" placeholder="Passwort eingeben" required>
+    <span class="toggle-password" onclick="togglePassword('password', this)">👁️</span>
+</div>
+
+<div id="passwordStrength" class="password-strength"></div>
+
+<label>Passwort wiederholen</label>
+<div class="password-wrapper">
+    <input type="password" id="password2" placeholder="Passwort wiederholen" required>
+    <span class="toggle-password" onclick="togglePassword('password2', this)">👁️</span>
+</div>
+
+<label>Discord-Name (optional)</label>
+<input type="text" id="discord" placeholder="Dein Discord-Name">
+
+<label>TikTok-Name (optional)</label>
+<input type="text" id="tiktok" placeholder="@deinname">
+<label class="checkbox-label">
+    <input type="checkbox" required>
+    Ich akzeptiere die Nutzungsbedingungen.
+</label>
+
+<button type="submit">Registrieren</button>
+
+<p class="form-link">
+    Bereits registriert?
+    <a href="login.html">Jetzt anmelden</a>
+</p>
+
+<p class="form-link">
+    <a href="forgot-password.html">🔑 Passwort vergessen?</a>
+</p>
+
+<div id="status" class="status"></div>
+
+</form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+
+<script>
+function togglePassword(id, icon){
+    const input=document.getElementById(id);
+
+    if(input.type==="password"){
+        input.type="text";
+        icon.textContent="🙈";
+    }else{
+        input.type="password";
+        icon.textContent="👁️";
+    }
+}
+</script>  
+  
+</script>
+</body>
+</html>

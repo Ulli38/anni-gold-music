@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Bereich</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+ <div class="left-decoration">
+  <div class="dec-line"></div>
+
+  <div class="dec-symbol">𝄞</div>
+
+  <div class="dec-line"></div>
+
+  <div class="dec-symbol clef">𝄞</div>
+
+  <div class="dec-line"></div>
+
+  <div class="dec-symbol">𝄞</div>
+
+  <div class="dec-line"></div>
+</div>
+
+<div class="right-decoration">
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol clef">𝄞</div>
+  <div class="dec-line"></div>
+  <div class="dec-symbol">𝄞</div>
+  <div class="dec-line"></div>
+</div>
+
+<div id="adminLogin" class="container">
+  <div class="card">
+    <h1>Admin Zugang</h1>
+    <p>Bitte Admin-Code eingeben.</p>
+
+    <input id="adminCodeInput" type="password" placeholder="Admin-Code">
+
+    <button onclick="adminCodePruefen()">Einloggen</button>
+
+    <p id="adminFehler" style="color:#ff4d6d;"></p>
+  </div>
+</div>
+
+</script>
+
+<div class="container" id="adminBereich" style="display:none;">
+<div class="logo-area">
+    <div class="logo-title">
+        <span class="logo-icon">𝄞</span> ANNI GOLD MUSIC
+    </div>
+
+    <div class="logo-subtitle">
+        Deine Musik. Deine Bühne. Dein Moment.
+    </div>
+</div>
+
+<h1 style="text-align:center;">
+⚙️ Admin Bereich
+</h1>
+<button onclick="logoutAdmin()" style="
+float:right;
+background:#8b0000;
+color:#ffd700;
+border:none;
+padding:10px 20px;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+box-shadow:0 0 15px rgba(255,215,0,0.4);
+">
+🚪 Logout
+</button>
+<p class="subtitle">
+Verwalte Songs, Mitglieder und LIVE-Tage.
+</p> 
+
+<div class="card stats-grid">
+
+  <div class="stat-box">
+    <span>👥 Mitglieder</span>
+    <strong id="mitgliederAnzahl">0</strong>
+  </div>
+
+  <div class="stat-box">
+    <span>🟡 Eingereicht</span>
+    <strong id="neueSongsAnzahl">0</strong>
+  </div>
+
+  <div class="stat-box">
+    <span>🟢 Angenommen</span>
+    <strong id="liveSongsAnzahl">0</strong>
+  </div>
+
+  <div class="stat-box">
+    <span>✅ Gespielt</span>
+    <strong id="gespieltSongsAnzahl">0</strong>
+  </div>
+
+  <div class="stat-box">
+    <span>🗓️ Montag LIVE</span>
+    <strong id="montagSongsAnzahl">0</strong>
+  </div>
+
+  <div class="stat-box">
+    <span>🗓️ Mittwoch LIVE</span>
+    <strong id="mittwochSongsAnzahl">0</strong>
+  </div>
+
+  <div class="stat-box">
+    <span>🗓️ Freitag LIVE</span>
+    <strong id="freitagSongsAnzahl">0</strong>
+  </div>
+
+  
+</div>
+<div class="card">
+  <h3>👥 Registrierte Mitglieder</h3>
+
+  <div id="mitgliederListe">
+    Lädt...
+  </div>
+</div>
+<div class="card">
+<h2>📅 Montag LIVE</h2>
+<div id="montagListe"></div>
+</div>
+
+<div class="card">
+<h2>📅 Mittwoch LIVE</h2>
+<div id="mittwochListe"></div>
+</div>
+
+<div class="card">
+<h2>📅 Freitag LIVE</h2>
+<div id="freitagListe"></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+
+const supabaseUrl =
+"https://ktnalbuhlfrmgkmivubj.supabase.co";
+
+const supabaseKey =
+"sb_publishable_TmTgUV4k6o6bR8ik21EiDg_7BvGKYb4";
+
+const supabaseClient =
+window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
+
+let songs = [];
+
+const montagListe =
+document.getElementById("montagListe");
+
+const mittwochListe =
+document.getElementById("mittwochListe");
+
+const freitagListe =
+document.getElementById("freitagListe");
+
+async function songsLaden() {
+
+  const { data, error } =
+  await supabaseClient
+ .from("Songs")
+.select("*")
+.order("created_at", { ascending: false });
+
+  
+if (error) {
+    alert(JSON.stringify(error));
+    return;
+  }
+
+  songs = data || [];
+
+const { data: mitglieder, error: mitgliederError } =
+await supabaseClient
+  .from("profiles")
+  .select("*");
+
+if (!mitgliederError && mitglieder) {
+  document.getElementById("mitgliederAnzahl").textContent =
+    mitglieder.length;
+
+  const mitgliederListe =
+    document.getElementById("mitgliederListe");
+
+  mitgliederListe.innerHTML = "";
+
+mitglieder.forEach(mitglied => {
+ mitgliederListe.innerHTML += `
+<div style="
+  padding:15px;
+  margin:10px 0;
+  background:rgba(20,20,20,0.85);
+  border:1px solid #d4af37;
+  border-radius:16px;
+  box-shadow:0 0 12px rgba(212,175,55,0.2);
+">
+  <div style="font-size:18px;font-weight:bold;color:#d4af37;">
+    👤 ${mitglied.name}
+  </div>
+
+  <div style="margin-top:6px;
+  color:#d4af37;
+  font-weight:700;
+  ">  
+    🎤 ${mitglied.kuenstlername}
+  </div>
+</div>
+`;
+  });
+}
+anzeigen();
+}
+
+
+function anzeigen() {
+const neueSongs =
+songs.filter(song =>
+song.status === "Neue Songs").length;
+
+const liveSongs =
+songs.filter(song =>
+song.status === "Heute im LIVE").length;
+
+const montagSongs =
+songs.filter(song =>
+song.live_day === "Montag").length;
+
+const mittwochSongs =
+songs.filter(song =>
+song.live_day === "Mittwoch").length;
+
+const freitagSongs =
+songs.filter(song =>
+song.live_day === "Freitag").length;
+document.getElementById(
+"neueSongsAnzahl"
+).textContent = neueSongs;
+const gespieltSongs =
+songs.filter(song =>
+song.status === "Bereits gespielt").length;
+document.getElementById(
+"liveSongsAnzahl"
+).textContent = liveSongs;
+document.getElementById(
+"montagSongsAnzahl"
+).textContent = montagSongs;
+document.getElementById(
+"mittwochSongsAnzahl"
+).textContent = mittwochSongs;
+
+document.getElementById(
+"freitagSongsAnzahl"
+).textContent = freitagSongs;
+document.getElementById(
+"gespieltSongsAnzahl"
+).textContent = gespieltSongs;
+  montagListe.innerHTML = "";
+  mittwochListe.innerHTML = "";
+  freitagListe.innerHTML = "";
+
+  songs.forEach(function(song) {
+
+  console.log(song.id, song.songtitel);
+
+  const card =
+  document.createElement("div");
+   
+
+    card.className = "card song-card";
+    card.innerHTML =
+
+      "<h2 style='font-size:22px;color:#d4af37;margin-bottom:18px;text-shadow:0 0 10px rgba(212,175,55,0.35);'>🎵 " 
++ song.songtitel + 
+"</h2>" +
+(song.status === "Neue Songs"
+? "<span style='background:#f4c542;color:#000;padding:6px 12px;border-radius:20px;font-weight:bold;'>🟡 Neue Songs</span>"
+: song.status === "Heute im LIVE"
+? "<span style='background:#16a34a;color:#ffd700;padding:6px 12px;border-radius:20px;font-weight:bold;text-shadow:0 0 12px #ffd700;'>🟢 Heute im LIVE</span>"
+: "<span style='background:#17a2b8;color:#fff;padding:6px 12px;border-radius:20px;font-weight:bold;'>✅ Bereits gespielt</span>"
+)
++
+"<div style='display:block;background:#111;color:#d4af37;border:1px solid #d4af37;padding:6px 12px;border-radius:20px;font-weight:bold;margin-top:8px;margin-bottom:10px;width:fit-content;'>📅 " +
+song.live_day +
+" LIVE</div>" +
+
+  "<p style='color:#d4af37;font-size:16px;font-weight:bold;'>👤 Künstler: "
++ song.kuenstlername +
+"</p>" +
+      "<p><strong>Einreicher:</strong> " +
+      song.einreichename + "</p>" +
+
+      "<p><strong>Beschreibung:</strong> " +
+      song.beschreibung + "</p>" +
+      "<p><strong>Genre:</strong> " +
+(song.genre || "Kein Genre angegeben") + "</p>" +
+"<p><strong>Spotify:</strong> " +
+
+(song.spotify_link
+ ? "<a href='" + song.spotify_link + "' target='_blank' style='display:inline-block;background:#1DB954;color:#facc15;padding:8px 16px;border-radius:25px;text-decoration:none;font-weight:bold;text-shadow:0 0 8px #facc15;box-shadow:0 0 15px rgba(29,185,84,0.5);'>Spotify öffnen</a>"
+ : "Kein Link hinterlegt")
+
++ "</p>" +
+
+"<div style='width:100%;margin-top:25px;margin-bottom:25px;background:#050505;border:1px solid #ffd700;border-radius:30px;box-shadow:0 0 22px rgba(255,215,0,0.55);padding:8px;'>" +
+"<audio controls style='width:100%;filter:invert(1);border-radius:25px;' src='" +
+song.audio_url +
+"' onended='statusAendern(" + song.id + ", \"Bereits gespielt\")'></audio>" +
+"</div>" +
+
+"<p><strong>Admin Notiz:</strong></p>" +
+
+"<textarea id='note_" + song.id + "' " +
+"style='width:100%;height:80px;margin-bottom:10px;'>" +
+
+(song.admin_note || "") +
+
+"</textarea>" +
+
+"<button onclick='notizSpeichern(" +
+song.id +
+")'>💾 Notiz speichern</button><br><br>" +
+"<button style='background:#28a745;color:#ffd700;text-shadow:0 0 20px #ffd700;border:none;padding:12px;border-radius:10px;width:100%;margin-top:10px;font-weight:bold;cursor:pointer;' onclick='statusAendern(" + song.id + ", \"Heute im LIVE\")'>🟢 Heute im LIVE</button><br><br>" +
+"<button style='background:#17a2b8;color:#ffd700;text-shadow:0 0 20px #ffd700;rgba(255,215,0,0.6);font-size:18px;font-weight:bold;border:none;padding:12px;border-radius:10px;width:100%;margin-top:10px;cursor:pointer;' onclick='statusAendern(" + song.id + ", \"Bereits gespielt\")'>✅ Bereits gespielt</button><br><br>" +
+
+"<button style='background:#8b0000;color:#ffd700;text-shadow:0 0 20px #ffd700;rgba(255,215,0,0.6);font-size:18px;font-weight:bold;border:none;padding:12px;border-radius:10px;width:100%;margin-top:10px;cursor:pointer;' onclick='loeschen(" + song.id + ")'>🗑️ Löschen</button>";
+
+if (song.live_day === "Montag") {
+  montagListe.appendChild(card);
+}
+
+else if (song.live_day === "Mittwoch") {
+  mittwochListe.appendChild(card);
+}
+
+else if (song.live_day === "Freitag") {
+  freitagListe.appendChild(card);
+}
+
+  });
+
+}
+
+songsLaden();
+async function statusAendern(id, neuerStatus) {
+  const { error } = await supabaseClient
+    .from("Songs")
+    .update({ status: neuerStatus })
+    .eq("id", id);
+
+  if (error) {
+    alert("Fehler: " + error.message);
+    return;
+  }
+
+  songsLaden();
+}
+
+async function notizSpeichern(id) {
+
+  const notiz =
+  document.getElementById(
+    "note_" + id
+  ).value;
+
+  const { error } =
+  await supabaseClient
+    .from("Songs")
+    .update({
+      admin_note: notiz
+    })
+    .eq("id", id);
+
+  if (error) {
+    alert("Fehler: " + error.message);
+    return;
+  }
+
+  alert("Notiz gespeichert ✅");
+}
+
+async function loeschen(id) {
+  const sicher = confirm("Song wirklich löschen?");
+
+  if (!sicher) {
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("Songs")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("Fehler: " + error.message);
+    return;
+  }
+
+  songsLaden();
+}
+</script>
+<script>
+function adminCodePruefen() {
+  const code = document.getElementById("adminCodeInput").value;
+  const fehler = document.getElementById("adminFehler");
+
+  if (code === "ADMIN2026") {
+    document.getElementById("adminLogin").style.display = "none";
+    document.getElementById("adminBereich").style.display = "block";
+  } else {
+    fehler.textContent = "Falscher Admin-Code.";
+  }
+}
+</script>
+<script>
+function logoutAdmin() {
+    document.getElementById("adminBereich").style.display = "none";
+    document.getElementById("adminLogin").style.display = "block";
+    document.getElementById("adminCodeInput").value = "";
+}
+</script>
+</body>
+</html>

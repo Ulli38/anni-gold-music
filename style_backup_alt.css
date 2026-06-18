@@ -1,0 +1,70 @@
+body {
+ background: #0a0a0a;
+background-image:
+linear-gradient(rgba(212,175,55,0.03), rgba(212,175,55,0.03));
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+}
+
+.card {
+ background: #111111;
+border: 1px solid #d4af37;
+box-shadow: 0 0 15px rgba(212,175,55,0.15);
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #d4af37;
+}
+
+input,
+textarea {
+ background: #181818;
+color: #f5f5f5;
+border: 1px solid #d4af37;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+button {
+ background: linear-gradient(
+135deg,
+#d4af37,
+#f5d76e
+);
+
+color: #111;
+border: 1px solid #d4af37;
+box-shadow: 0 0 12px rgba(212,175,55,0.4); 
+}
+
+button:hover {
+  background: linear-gradient(
+135deg,
+#f5d76e,
+#ffd700
+);
+
+transform: scale(1.02);
+}
+
+.live {
+  border: 2px solid #00ff99;
+}
+
+.played {
+  opacity: 0.6;
+}
+
+h1, h2 {
+    color: #d4af37;
+    text-shadow: 0 0 8px rgba(212,175,55,0.4);
+}

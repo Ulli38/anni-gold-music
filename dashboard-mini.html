@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>LIVE Mini Dashboard</title>
+
+<style>
+body{
+  margin:0;
+  background:transparent;
+  font-family:Arial, sans-serif;
+  color:white;
+}
+
+.box{
+  width:300px;
+  padding:14px 18px;
+  border-radius:22px;
+  background:rgba(5,5,15,0.92);
+  box-shadow:0 0 28px rgba(255,0,180,0.55);
+  text-align:center;
+}
+
+.songtitel{
+  font-size:24px;
+  font-weight:900;
+  text-transform:uppercase;
+  line-height:1.05;
+  text-shadow:0 0 18px rgba(255,255,255,0.65);
+}
+
+.kuenstler{
+  font-size:16px;
+  margin-top:18px;
+  opacity:0.95;
+}
+
+.trenner{
+  height:3px;
+  width:100%;
+  margin:28px 0;
+  background:linear-gradient(90deg, #ff008c, #7b2cff);
+  box-shadow:0 0 14px rgba(255,0,180,0.8);
+}
+
+.live{
+  font-size:18px;
+  font-weight:900;
+  color:#ff4d6d;
+  text-shadow:0 0 18px rgba(255,77,109,0.9);
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <div class="songtitel" id="songtitel">Kein Song aktiv</div>
+  <div class="kuenstler" id="kuenstler">-</div>
+  <div class="trenner"></div>
+  <div class="live">🔴 JETZT IM LIVE</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+const supabaseUrl = "https://ktnalbuhlfrmgkmivubj.supabase.co";
+const supabaseKey = "sb_publishable_TmTgUV4k6o6bR8ik21EiDg_7BvGKYb4";
+
+const supabaseClient =
+window.supabase.createClient(supabaseUrl, supabaseKey);
+
+const songtitel = document.getElementById("songtitel");
+const kuenstler = document.getElementById("kuenstler");
+
+async function laden() {
+  const { data, error } = await supabaseClient
+    .from("Songs")
+    .select("*")
+    .eq("status", "Heute im LIVE")
+    .limit(1);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  if (data && data.length > 0) {
+    songtitel.textContent = data[0].songtitel;
+    kuenstler.textContent = data[0].kuenstlername;
+  }
+}
+
+laden();
+setInterval(laden, 5000);
+</script>
+
+</body>
+</html>

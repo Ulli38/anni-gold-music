@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="180"
+     height="900"
+     viewBox="0 0 180 900">
+
+  <line x1="55" y1="40"
+        x2="55" y2="180"
+        stroke="#d4af37"
+        stroke-width="3"/>
+        filter="url(#goldGlow)"
+
+  <line x1="55" y1="260"
+        x2="55" y2="400"
+        stroke="#d4af37"
+        stroke-width="3"/>
+        filter="url(#goldGlow)"
+
+  <line x1="55" y1="480"
+        x2="55" y2="620"
+        stroke="#d4af37"
+        stroke-width="3"/>
+        filter="url(#goldGlow)"
+
+  <line x1="55" y1="700"
+        x2="55" y2="860"
+        stroke="#d4af37"
+        stroke-width="3"/>
+        filter="url(#goldGlow)"
+
+
+</svg>
+
+<defs>
+  <filter id="goldGlow">
+    <feGaussianBlur stdDeviation="2.5" result="blur"/>
+    <feMerge>
+      <feMergeNode in="blur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</defs>
