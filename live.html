@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>LIVE Playlist</title>
+
   <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d4af37">
 </head>
 <body>
 
@@ -77,8 +80,12 @@ audio.onended = async function() {
   liveSongsLaden();
 };
 
-card.appendChild(audio);
-liveListe.appendChild(card);
+    card.appendChild(audio);
+    liveListe.appendChild(card);
+
+  });
+
+}
 
 liveSongsLaden();
 </script>
