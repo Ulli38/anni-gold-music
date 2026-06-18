@@ -183,6 +183,10 @@ if (error) {
   }
 
   songs = data || [];
+  
+  console.log("Songs:", data);
+console.log("Fehler:", error);
+anzeigen();
 
 const { data: mitglieder, error: mitgliederError } =
 await supabaseClient
