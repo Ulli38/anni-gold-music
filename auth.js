@@ -101,7 +101,7 @@ if (forgotPasswordForm) {
     });
 }
 async function passwortResetSenden() {
-    alert("Reset-Funktion wurde gestartet");
+    
 
     const email = document.getElementById("email").value.trim();
     const status = document.getElementById("status");
