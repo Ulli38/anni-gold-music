@@ -713,3 +713,89 @@ body::after {
   color: #f8e7a1;
   font-weight: 600;
 }
+/* =======================
+   ANNI GOLD LOGO
+======================= */
+
+.logo-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.anni-logo{
+    width:230px;
+    max-width:90%;
+    height:auto;
+    display:block;
+    margin:0 auto 25px auto;
+
+    filter:
+        drop-shadow(0 0 15px rgba(212,175,55,.45))
+        drop-shadow(0 0 35px rgba(212,175,55,.25));
+
+    transition:.35s;
+}
+
+.anni-logo:hover{
+    transform:scale(1.04);
+}
+/* =========================
+   Community Textfarben
+========================= */
+
+.card h2{
+    color:#f6d86b;
+}
+
+.card p{
+    color:#d4af37;
+}
+
+.card input{
+    color:#f6d86b;
+}
+
+.card input::placeholder{
+    color:#d4af37;
+    opacity:1;
+}
+/* Login/Register Links */
+
+.form-link,
+.form-link a,
+.card a{
+    color:#d4af37;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.form-link a:hover,
+.card a:hover{
+    color:#f6d86b;
+    text-shadow:0 0 10px rgba(212,175,55,.6);
+}
+/* Passwortfeld */
+
+.password-box{
+    position:relative;
+    width:100%;
+}
+
+.password-box input{
+    width:100%;
+    padding-right:55px;
+    box-sizing:border-box;
+}
+
+.toggle-password{
+    position:absolute;
+    right:18px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#d4af37;
+    cursor:pointer;
+    font-size:18px;
+    user-select:none;
+}
