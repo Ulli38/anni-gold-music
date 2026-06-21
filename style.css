@@ -834,7 +834,7 @@ body::after{
     top:50%;
     width:120px;
     height:520px;
-    background-image:url("assets/music-ornament.png");
+    background-image:url("assets/assets/music-ornament.png");
     background-repeat:no-repeat;
     background-size:contain;
     background-position:center;
