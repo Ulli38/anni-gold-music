@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrierung</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d4af37">
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+</head>
+<body>
+ <img src="assets/assets/music-ornament.png" class="side-ornament left-ornament" alt="">
+<img src="assets/assets/music-ornament.png" class="side-ornament right-ornament" alt="">
+  <main class="container">
+    <header>
+     <header class="upload-header">
+
+  <div class="logo-area">
+    <div class="logo-title">
+  </div>
+  <form id="registerForm" class="card"> 
+
+ <div class="card">
+
+    <h1>📜 Allgemeine Geschäftsbedingungen</h1>
+
+    <br>
+
+    <h3>1. Geltungsbereich</h3>
+
+    <p>
+        Diese Nutzungsbedingungen gelten für die Nutzung der Plattform ANNI GOLD MUSIC.
+    </p>
+
+    <br>
+
+    <h3>2. Registrierung</h3>
+
+    <p>
+        Für die Nutzung bestimmter Funktionen ist eine Registrierung erforderlich. Die angegebenen Daten müssen wahrheitsgemäß sein.
+    </p>
+
+    <br>
+
+    <h3>3. Hochgeladene Inhalte</h3>
+
+    <p>
+        Der Nutzer versichert, dass er alle erforderlichen Rechte an den hochgeladenen Songs, Bildern und Texten besitzt.
+    </p>
+
+    <br>
+
+    <h3>4. Verbotene Inhalte</h3>
+
+    <p>
+        Es dürfen keine rechtswidrigen, beleidigenden, diskriminierenden oder urheberrechtsverletzenden Inhalte hochgeladen werden.
+    </p>
+
+    <br>
+
+    <h3>5. Haftung</h3>
+
+    <p>
+        Für hochgeladene Inhalte ist ausschließlich der jeweilige Nutzer verantwortlich.
+    </p>
+
+    <br>
+
+    <h3>6. Änderungen</h3>
+
+    <p>
+        ANNI GOLD MUSIC behält sich das Recht vor, diese Nutzungsbedingungen jederzeit anzupassen.
+    </p>
+
+    <br>
+
+    <a href="register.html">
+        ← Zur Registrierung
+    </a>
+
+</div>
+
+</form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+
+<script>
+function togglePassword(id, icon){
+    const input=document.getElementById(id);
+
+    if(input.type==="password"){
+        input.type="text";
+        icon.textContent="🙈";
+    }else{
+        input.type="password";
+        icon.textContent="👁️";
+    }
+}
+</script>  
+</script>
+
+<footer class="footer-links">
+    <p>© 2026 ANNI GOLD MUSIC</p>
+
+    <div>
+        <a href="agb.html">AGB</a>
+        <span>•</span>
+        <a href="datenschutz.html">Datenschutz</a>
+        <span>•</span>
+        <a href="impressum.html">Impressum</a>
+    </div>
+</footer>
+
+</body>
+</html>

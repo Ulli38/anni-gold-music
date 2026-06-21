@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrierung</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d4af37">
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+</head>
+<body>
+ <img src="assets/assets/music-ornament.png" class="side-ornament left-ornament" alt="">
+<img src="assets/assets/music-ornament.png" class="side-ornament right-ornament" alt="">
+  <main class="container">
+    <header>
+     <header class="upload-header">
+
+  <div class="logo-area">
+    <div class="logo-title">
+  </div>
+  <form id="registerForm" class="card"> 
+
+<div class="card">
+
+    <h1><span class="gold-icon">📄</span> Impressum</h1>
+
+    <p>Angaben gemäß § 5 TMG</p>
+
+    <h3>Betreiber</h3>
+
+    <p><strong>ANNI GOLD MUSIC</strong></p>
+
+    <p>
+        Name:<br>
+        HIER DEIN NAME
+    </p>
+
+    <p>
+        Anschrift:<br>
+        HIER DEINE ANSCHRIFT
+    </p>
+
+    <p>
+        E-Mail:<br>
+        HIER DEINE E-MAIL
+    </p>
+
+    <p>
+        Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV:
+    </p>
+
+    <p>
+        HIER DEIN NAME
+    </p>
+
+    <br>
+
+    <a href="register.html" class="back-link">
+        ← Zur Registrierung
+    </a>
+
+</div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+
+<script>
+function togglePassword(id, icon){
+    const input=document.getElementById(id);
+
+    if(input.type==="password"){
+        input.type="text";
+        icon.textContent="🙈";
+    }else{
+        input.type="password";
+        icon.textContent="👁️";
+    }
+}
+</script>  
+</script>
+
+<footer class="footer-links">
+    <p>© 2026 ANNI GOLD MUSIC</p>
+
+    <div>
+        <a href="agb.html">AGB</a>
+        <span>•</span>
+        <a href="datenschutz.html">Datenschutz</a>
+        <span>•</span>
+        <a href="impressum.html">Impressum</a>
+    </div>
+</footer>
+
+</body>
+</html>
