@@ -103,16 +103,9 @@ box-shadow:0 0 15px rgba(255,215,0,0.4);
     <span>🗓️ Freitag LIVE</span>
     <strong id="freitagSongsAnzahl">0</strong>
   </div>
-
   
 </div>
-<div class="card">
-  <h3>👥 Registrierte Mitglieder</h3>
 
-  <div id="mitgliederListe">
-    Lädt...
-  </div>
-</div>
 <div class="card">
 <h2>📅 Montag LIVE</h2>
 <div id="montagListe"></div>
@@ -185,34 +178,7 @@ if (!mitgliederError && mitglieder) {
   document.getElementById("mitgliederAnzahl").textContent =
     mitglieder.length;
 
-  const mitgliederListe =
-    document.getElementById("mitgliederListe");
-
-  mitgliederListe.innerHTML = "";
-
-mitglieder.forEach(mitglied => {
- mitgliederListe.innerHTML += `
-<div style="
-  padding:15px;
-  margin:10px 0;
-  background:rgba(20,20,20,0.85);
-  border:1px solid #d4af37;
-  border-radius:16px;
-  box-shadow:0 0 12px rgba(212,175,55,0.2);
-">
-  <div style="font-size:18px;font-weight:bold;color:#d4af37;">
-    👤 ${mitglied.name}
-  </div>
-
-  <div style="margin-top:6px;
-  color:#d4af37;
-  font-weight:700;
-  ">  
-    🎤 ${mitglied.kuenstlername}
-  </div>
-</div>
-`;
-  });
+  
 }
 anzeigen();
 }
