@@ -513,11 +513,11 @@ body::after {
   position: fixed;
   top: 0;
   height: 100vh;
-  width: 180px;
+  width: 300px;
   z-index: -1;
   pointer-events: none;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 100% 100%;
   opacity: 1;
   filter:
     drop-shadow(0 0 8px rgba(212,175,55,.75))
@@ -525,15 +525,16 @@ body::after {
 }
 
 body::before {
-  left: 45px;
-  background-image: url("assets/gold-pattern-left.svg");
-  background-position: left center;
+    left: 45px;
+    background-image: url("assets/assets/music-ornament.png");
+    background-position: left center;
 }
 
 body::after {
-  right: 45px;
-  background-image: url("assets/gold-pattern-right.svg");
-  background-position: right center;
+    right: 45px;
+    background-image: url("assets/assets/music-ornament.png");
+    background-position: right center;
+    transform: translateY(-50%) scaleX(-1);
 }
 
 .container {
@@ -721,11 +722,11 @@ body::after {
     display:flex;
     justify-content:center;
     align-items:center;
-    margin-bottom:20px;
+    margin-bottom:35px;
 }
 
 .anni-logo{
-    width:230px;
+    width:180px;
     max-width:90%;
     height:auto;
     display:block;
@@ -799,3 +800,107 @@ body::after {
     font-size:18px;
     user-select:none;
 }
+/* Upload-Seite Feinschliff */
+
+#uploadForm .anni-logo{
+    width:180px;
+    margin-bottom:18px;
+}
+#uploadForm .logo-container{
+    margin-bottom:8px;
+}
+
+#uploadForm h1{
+    text-align:center;
+    margin-top:10px;
+    margin-bottom:8px;
+}
+
+#uploadForm > p{
+    text-align:center;
+    margin-bottom:35px;
+    color:#d4af37;
+    font-weight:700;
+}
+#uploadForm label{
+    margin-top:18px;
+}
+
+#uploadForm input,
+#uploadForm textarea,
+#uploadForm select{
+    margin-bottom:18px;
+}
+#uploadForm label{
+    color: #d4af37;
+}
+#uploadForm input::placeholder,
+#uploadForm textarea::placeholder{
+    color: #d4af37;
+    opacity: 0.75;
+}
+#uploadForm input,
+#uploadForm textarea,
+#uploadForm select{
+    color:#d4af37;
+}
+
+#uploadForm label:not(.file-label){
+    color:#d4af37;
+}
+.file-label{
+    color:#000 !important;
+}
+.gold-label{
+    color:#d4af37 !important;
+    font-weight:700;
+}
+/* Neue seitliche Musik-Ornamente */
+
+body::before,
+body::after{
+    content:"";
+    position:fixed;
+    top:50%;
+    width:120px;
+    height:520px;
+    background-image:url("assets/music-ornament.png");
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    opacity:0.75;
+    filter:drop-shadow(0 0 12px rgba(212,175,55,0.45));
+    pointer-events:none;
+    z-index:0;
+}
+
+body::before{
+    left:35px;
+    transform:translateY(-50%);
+}
+
+body::after{
+    right:35px;
+    transform:translateY(-50%) scaleX(-1);
+}
+/* Neue echte Seiten-Ornamente */
+
+.side-ornament{
+    position:fixed;
+    top:50%;
+    width:120px;
+    height:auto;
+    transform:translateY(-50%);
+    opacity:0.9;
+    pointer-events:none;
+    z-index:0;
+}
+
+.left-ornament{
+    left:80px;
+}
+.right-ornament{
+    right:80px;
+    transform:translateY(-50%) scaleX(-1);
+}
+
