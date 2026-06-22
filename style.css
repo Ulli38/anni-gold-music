@@ -695,11 +695,9 @@ audio {
     right: 4px;
   }
 }
-
-@media (max-width: 820px) {
-  .side-ornament {
-    display: none;
-  }
+.side-ornament {
+  display: block !important;
+}
 
   .container {
     padding: 30px 16px 70px;
@@ -719,7 +717,7 @@ audio {
     width: 100% !important;
     margin: 0 0 12px !important;
   }
-}
+
 
 @media (max-width: 480px) {
   h1 {
