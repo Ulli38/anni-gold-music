@@ -35,7 +35,7 @@ body {
 .container {
   position: relative;
   z-index: 1;
-  width: 100%;
+  width: calc(100% - 110px);
   max-width: 760px;
   margin: 0 auto;
   padding: 45px 25px 90px;
@@ -583,7 +583,7 @@ audio {
 .side-ornament {
   position: fixed;
   top: 50%;
-  z-index: 0;
+  z-index: 50;
   width: 120px;
   height: auto;
   opacity: 0.9;
