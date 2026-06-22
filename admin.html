@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Bereich | ANNI GOLD MUSIC</title>
+
+  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#d4af37">
+</head>
+
+<body>
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament left-ornament"
+    alt=""
+  >
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament right-ornament"
+    alt=""
+  >
+
+  <!-- Admin-Anmeldung -->
+  <main id="adminLogin" class="container">
+
+    <div class="card">
+
+      <div class="logo-container">
+        <img
+          src="assets/assets/anni-logo.png"
+          alt="ANNI GOLD MUSIC"
+          class="anni-logo"
+        >
+      </div>
+
+      <h1>Admin Zugang</h1>
+
+      <p>Bitte Admin-Code eingeben.</p>
+
+      <input
+        id="adminCodeInput"
+        type="password"
+        placeholder="Admin-Code"
+        autocomplete="current-password"
+        required
+      >
+
+      <button
+        type="button"
+        onclick="adminCodePruefen()"
+      >
+        Einloggen
+      </button>
+
+      <p
+        id="adminFehler"
+        class="status"
+        style="color:#ff4d6d;"
+        aria-live="polite"
+      ></p>
+
+    </div>
+
+  </main>
+
+  <!-- Admin-Dashboard -->
+  <main
+    id="adminBereich"
+    class="container"
+    style="display:none;"
+  >
+
+    <div class="logo-container">
+      <img
+        src="assets/assets/anni-logo.png"
+        alt="ANNI GOLD MUSIC"
+        class="anni-logo"
+      >
+    </div>
+
+    <button
+      type="button"
+      onclick="window.open('live.html', '_blank')"
+      style="
+        float:right;
+        margin-right:10px;
+        background:#0a0a0a;
+        color:#d4af37;
+        border:2px solid #d4af37;
+        padding:10px 20px;
+        border-radius:12px;
+        cursor:pointer;
+        font-weight:bold;
+        box-shadow:0 0 15px rgba(212,175,55,0.4);
+      "
+    >
+      🎥 LIVE öffnen
+    </button>
+
+    <button
+      type="button"
+      onclick="logoutAdmin()"
+      style="
+        float:right;
+        margin-right:0;
+        background:#8b0000;
+        color:#ffd700;
+        border:none;
+        padding:10px 20px;
+        border-radius:12px;
+        cursor:pointer;
+        font-weight:bold;
+        box-shadow:0 0 15px rgba(255,215,0,0.4);
+      "
+    >
+      🚪 Logout
+    </button>
+
+    <div
+      class="card stats-grid"
+      style="clear:both;"
+    >
+
+      <div class="stat-box">
+        <span>👥 Mitglieder</span>
+        <strong id="mitgliederAnzahl">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>🟡 Eingereicht</span>
+        <strong id="neueSongsAnzahl">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>🟢 Angenommen</span>
+        <strong id="liveSongsAnzahl">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>✅ Gespielt</span>
+        <strong id="gespieltSongsAnzahl">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>🗓️ Montag LIVE</span>
+        <strong id="montagSongsAnzahl">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>🗓️ Mittwoch LIVE</span>
+        <strong id="mittwochSongsAnzahl">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>🗓️ Freitag LIVE</span>
+        <strong id="freitagSongsAnzahl">0</strong>
+      </div>
+
+    </div>
+
+    <div class="card">
+      <h2>📅 Montag LIVE</h2>
+      <div id="montagListe"></div>
+    </div>
+
+    <div class="card">
+      <h2>📅 Mittwoch LIVE</h2>
+      <div id="mittwochListe"></div>
+    </div>
+
+    <div class="card">
+      <h2>📅 Freitag LIVE</h2>
+      <div id="freitagListe"></div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const supabaseUrl =
+      "https://ktnalbuhlfrmgkmivubj.supabase.co";
+
+    const supabaseKey =
+      "sb_publishable_TmTgUV4k6o6bR8ik21EiDg_7BvGKYb4";
+
+    const supabaseClient = window.supabase.createClient(
+      supabaseUrl,
+      supabaseKey
+    );
+
+    let songs = [];
+
+    const montagListe =
+      document.getElementById("montagListe");
+
+    const mittwochListe =
+      document.getElementById("mittwochListe");
+
+    const freitagListe =
+      document.getElementById("freitagListe");
+
+    async function songsLaden() {
+      const { data, error } = await supabaseClient
+        .from("Songs")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+      if (error) {
+        console.error("Fehler beim Laden der Songs:", error);
+        alert("Fehler beim Laden: " + error.message);
+        return;
+      }
+
+      songs = data || [];
+
+      anzeigen();
+
+      const {
+        data: mitglieder,
+        error: mitgliederError
+      } = await supabaseClient
+        .from("profiles")
+        .select("*");
+
+      if (mitgliederError) {
+        console.error(
+          "Fehler beim Laden der Mitglieder:",
+          mitgliederError
+        );
+
+        return;
+      }
+
+      document.getElementById(
+        "mitgliederAnzahl"
+      ).textContent = mitglieder ? mitglieder.length : 0;
+    }
+
+    function anzeigen() {
+      const neueSongs = songs.filter(function (song) {
+        return song.status === "Neue Songs";
+      }).length;
+
+      const liveSongs = songs.filter(function (song) {
+        return song.status === "Heute im LIVE";
+      }).length;
+
+      const gespieltSongs = songs.filter(function (song) {
+        return song.status === "Bereits gespielt";
+      }).length;
+
+      const montagSongs = songs.filter(function (song) {
+        return song.live_day === "Montag";
+      }).length;
+
+      const mittwochSongs = songs.filter(function (song) {
+        return song.live_day === "Mittwoch";
+      }).length;
+
+      const freitagSongs = songs.filter(function (song) {
+        return song.live_day === "Freitag";
+      }).length;
+
+      document.getElementById(
+        "neueSongsAnzahl"
+      ).textContent = neueSongs;
+
+      document.getElementById(
+        "liveSongsAnzahl"
+      ).textContent = liveSongs;
+
+      document.getElementById(
+        "gespieltSongsAnzahl"
+      ).textContent = gespieltSongs;
+
+      document.getElementById(
+        "montagSongsAnzahl"
+      ).textContent = montagSongs;
+
+      document.getElementById(
+        "mittwochSongsAnzahl"
+      ).textContent = mittwochSongs;
+
+      document.getElementById(
+        "freitagSongsAnzahl"
+      ).textContent = freitagSongs;
+
+      montagListe.innerHTML = "";
+      mittwochListe.innerHTML = "";
+      freitagListe.innerHTML = "";
+
+      songs.forEach(function (song) {
+        const card = document.createElement("div");
+        card.className = "card song-card";
+
+        const titel = document.createElement("h2");
+
+        titel.style.fontSize = "22px";
+        titel.style.color = "#d4af37";
+        titel.style.marginBottom = "18px";
+        titel.style.textShadow =
+          "0 0 10px rgba(212,175,55,0.35)";
+
+        titel.textContent =
+          "🎵 " + (song.songtitel || "Unbekannter Song");
+
+        const statusBadge = document.createElement("span");
+
+        statusBadge.style.padding = "6px 12px";
+        statusBadge.style.borderRadius = "20px";
+        statusBadge.style.fontWeight = "bold";
+        statusBadge.style.display = "inline-block";
+
+        if (song.status === "Neue Songs") {
+          statusBadge.textContent = "🟡 Neue Songs";
+          statusBadge.style.background = "#f4c542";
+          statusBadge.style.color = "#000";
+        } else if (song.status === "Heute im LIVE") {
+          statusBadge.textContent = "🟢 Heute im LIVE";
+          statusBadge.style.background = "#16a34a";
+          statusBadge.style.color = "#ffd700";
+          statusBadge.style.textShadow =
+            "0 0 12px #ffd700";
+        } else {
+          statusBadge.textContent = "✅ Bereits gespielt";
+          statusBadge.style.background = "#17a2b8";
+          statusBadge.style.color = "#fff";
+        }
+
+        const liveTag = document.createElement("div");
+
+        liveTag.style.display = "block";
+        liveTag.style.background = "#111";
+        liveTag.style.color = "#d4af37";
+        liveTag.style.border = "1px solid #d4af37";
+        liveTag.style.padding = "6px 12px";
+        liveTag.style.borderRadius = "20px";
+        liveTag.style.fontWeight = "bold";
+        liveTag.style.marginTop = "8px";
+        liveTag.style.marginBottom = "10px";
+        liveTag.style.width = "fit-content";
+
+        liveTag.textContent =
+          "📅 " + (song.live_day || "Kein Tag") + " LIVE";
+
+        const kuenstler = document.createElement("p");
+
+        kuenstler.style.color = "#d4af37";
+        kuenstler.style.fontSize = "16px";
+        kuenstler.style.fontWeight = "bold";
+
+        kuenstler.textContent =
+          "👤 Künstler: " +
+          (song.kuenstlername || "Nicht angegeben");
+
+        const einreicher = document.createElement("p");
+        const einreicherTitel =
+          document.createElement("strong");
+
+        einreicherTitel.textContent = "Einreicher: ";
+
+        einreicher.appendChild(einreicherTitel);
+        einreicher.appendChild(
+          document.createTextNode(
+            song.einreichename || "Nicht angegeben"
+          )
+        );
+
+        const beschreibung = document.createElement("p");
+        const beschreibungTitel =
+          document.createElement("strong");
+
+        beschreibungTitel.textContent = "Beschreibung: ";
+
+        beschreibung.appendChild(beschreibungTitel);
+        beschreibung.appendChild(
+          document.createTextNode(
+            song.beschreibung ||
+            "Keine Beschreibung vorhanden"
+          )
+        );
+
+        const genre = document.createElement("p");
+        const genreTitel =
+          document.createElement("strong");
+
+        genreTitel.textContent = "Genre: ";
+
+        genre.appendChild(genreTitel);
+        genre.appendChild(
+          document.createTextNode(
+            song.genre || "Kein Genre angegeben"
+          )
+        );
+
+        const spotify = document.createElement("p");
+        const spotifyTitel =
+          document.createElement("strong");
+
+        spotifyTitel.textContent = "Spotify: ";
+
+        spotify.appendChild(spotifyTitel);
+
+        if (song.spotify_link) {
+          const spotifyLink =
+            document.createElement("a");
+
+          spotifyLink.href = song.spotify_link;
+          spotifyLink.target = "_blank";
+          spotifyLink.rel = "noopener";
+          spotifyLink.textContent = "Spotify öffnen";
+
+          spotifyLink.style.display = "inline-block";
+          spotifyLink.style.background = "#1DB954";
+          spotifyLink.style.color = "#facc15";
+          spotifyLink.style.padding = "8px 16px";
+          spotifyLink.style.borderRadius = "25px";
+          spotifyLink.style.textDecoration = "none";
+          spotifyLink.style.fontWeight = "bold";
+          spotifyLink.style.textShadow =
+            "0 0 8px #facc15";
+          spotifyLink.style.boxShadow =
+            "0 0 15px rgba(29,185,84,0.5)";
+
+          spotify.appendChild(spotifyLink);
+        } else {
+          spotify.appendChild(
+            document.createTextNode(
+              "Kein Link hinterlegt"
+            )
+          );
+        }
+
+        const audioBox = document.createElement("div");
+
+        audioBox.style.width = "100%";
+        audioBox.style.marginTop = "25px";
+        audioBox.style.marginBottom = "25px";
+        audioBox.style.background = "#050505";
+        audioBox.style.border = "1px solid #ffd700";
+        audioBox.style.borderRadius = "30px";
+        audioBox.style.boxShadow =
+          "0 0 22px rgba(255,215,0,0.55)";
+        audioBox.style.padding = "8px";
+
+        const audio = document.createElement("audio");
+
+        audio.controls = true;
+        audio.src = song.audio_url || "";
+        audio.style.width = "100%";
+        audio.style.filter = "invert(1)";
+        audio.style.borderRadius = "25px";
+
+        audio.addEventListener("ended", function () {
+          statusAendern(
+            song.id,
+            "Bereits gespielt"
+          );
+        });
+
+        audioBox.appendChild(audio);
+
+        const notizTitel = document.createElement("p");
+        const notizTitelText =
+          document.createElement("strong");
+
+        notizTitelText.textContent = "Admin Notiz:";
+        notizTitel.appendChild(notizTitelText);
+
+        const notizFeld =
+          document.createElement("textarea");
+
+        notizFeld.value = song.admin_note || "";
+        notizFeld.style.width = "100%";
+        notizFeld.style.height = "80px";
+        notizFeld.style.marginBottom = "10px";
+
+        const notizButton =
+          document.createElement("button");
+
+        notizButton.type = "button";
+        notizButton.textContent = "💾 Notiz speichern";
+
+        notizButton.addEventListener(
+          "click",
+          function () {
+            notizSpeichern(
+              song.id,
+              notizFeld.value
+            );
+          }
+        );
+
+        const liveButton =
+          document.createElement("button");
+
+        liveButton.type = "button";
+        liveButton.textContent = "🟢 Heute im LIVE";
+
+        liveButton.style.background = "#28a745";
+        liveButton.style.color = "#ffd700";
+        liveButton.style.textShadow =
+          "0 0 20px #ffd700";
+        liveButton.style.border = "none";
+        liveButton.style.padding = "12px";
+        liveButton.style.borderRadius = "10px";
+        liveButton.style.width = "100%";
+        liveButton.style.marginTop = "20px";
+        liveButton.style.fontWeight = "bold";
+        liveButton.style.cursor = "pointer";
+
+        liveButton.addEventListener(
+          "click",
+          function () {
+            statusAendern(
+              song.id,
+              "Heute im LIVE"
+            );
+          }
+        );
+
+        const gespieltButton =
+          document.createElement("button");
+
+        gespieltButton.type = "button";
+        gespieltButton.textContent =
+          "✅ Bereits gespielt";
+
+        gespieltButton.style.background = "#17a2b8";
+        gespieltButton.style.color = "#ffd700";
+        gespieltButton.style.textShadow =
+          "0 0 20px #ffd700";
+        gespieltButton.style.fontSize = "18px";
+        gespieltButton.style.fontWeight = "bold";
+        gespieltButton.style.border = "none";
+        gespieltButton.style.padding = "12px";
+        gespieltButton.style.borderRadius = "10px";
+        gespieltButton.style.width = "100%";
+        gespieltButton.style.marginTop = "20px";
+        gespieltButton.style.cursor = "pointer";
+
+        gespieltButton.addEventListener(
+          "click",
+          function () {
+            statusAendern(
+              song.id,
+              "Bereits gespielt"
+            );
+          }
+        );
+
+        const loeschenButton =
+          document.createElement("button");
+
+        loeschenButton.type = "button";
+        loeschenButton.textContent = "🗑️ Löschen";
+
+        loeschenButton.style.background = "#8b0000";
+        loeschenButton.style.color = "#ffd700";
+        loeschenButton.style.textShadow =
+          "0 0 20px #ffd700";
+        loeschenButton.style.fontSize = "18px";
+        loeschenButton.style.fontWeight = "bold";
+        loeschenButton.style.border = "none";
+        loeschenButton.style.padding = "12px";
+        loeschenButton.style.borderRadius = "10px";
+        loeschenButton.style.width = "100%";
+        loeschenButton.style.marginTop = "20px";
+        loeschenButton.style.cursor = "pointer";
+
+        loeschenButton.addEventListener(
+          "click",
+          function () {
+            loeschen(song.id);
+          }
+        );
+
+        card.appendChild(titel);
+        card.appendChild(statusBadge);
+        card.appendChild(liveTag);
+        card.appendChild(kuenstler);
+        card.appendChild(einreicher);
+        card.appendChild(beschreibung);
+        card.appendChild(genre);
+        card.appendChild(spotify);
+        card.appendChild(audioBox);
+        card.appendChild(notizTitel);
+        card.appendChild(notizFeld);
+        card.appendChild(notizButton);
+        card.appendChild(liveButton);
+        card.appendChild(gespieltButton);
+        card.appendChild(loeschenButton);
+
+        if (song.live_day === "Montag") {
+          montagListe.appendChild(card);
+        } else if (song.live_day === "Mittwoch") {
+          mittwochListe.appendChild(card);
+        } else if (song.live_day === "Freitag") {
+          freitagListe.appendChild(card);
+        }
+      });
+    }
+
+    async function statusAendern(
+      id,
+      neuerStatus
+    ) {
+      const { error } = await supabaseClient
+        .from("Songs")
+        .update({
+          status: neuerStatus
+        })
+        .eq("id", id);
+
+      if (error) {
+        alert("Fehler: " + error.message);
+        return;
+      }
+
+      await songsLaden();
+    }
+
+    async function notizSpeichern(
+      id,
+      notiz
+    ) {
+      const { error } = await supabaseClient
+        .from("Songs")
+        .update({
+          admin_note: notiz
+        })
+        .eq("id", id);
+
+      if (error) {
+        alert("Fehler: " + error.message);
+        return;
+      }
+
+      alert("Notiz gespeichert ✅");
+    }
+
+    async function loeschen(id) {
+      const sicher = confirm(
+        "Song wirklich löschen?"
+      );
+
+      if (!sicher) {
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("Songs")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        alert("Fehler: " + error.message);
+        return;
+      }
+
+      await songsLaden();
+    }
+
+    async function adminCodePruefen() {
+      const code = document.getElementById(
+        "adminCodeInput"
+      ).value;
+
+      const fehler = document.getElementById(
+        "adminFehler"
+      );
+
+      if (code === "ADMIN2026") {
+        fehler.textContent = "";
+
+        document.getElementById(
+          "adminLogin"
+        ).style.display = "none";
+
+        document.getElementById(
+          "adminBereich"
+        ).style.display = "block";
+
+        await songsLaden();
+      } else {
+        fehler.textContent =
+          "Falscher Admin-Code.";
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById(
+        "adminBereich"
+      ).style.display = "none";
+
+      document.getElementById(
+        "adminLogin"
+      ).style.display = "block";
+
+      document.getElementById(
+        "adminCodeInput"
+      ).value = "";
+
+      document.getElementById(
+        "adminFehler"
+      ).textContent = "";
+    }
+
+    document.getElementById(
+      "adminCodeInput"
+    ).addEventListener(
+      "keydown",
+      function (event) {
+        if (event.key === "Enter") {
+          adminCodePruefen();
+        }
+      }
+    );
+  </script>
+
+  <script src="pwa.js?v=4"></script>
+  
+</body>
+
+</html>

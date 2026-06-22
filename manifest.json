@@ -1,0 +1,23 @@
+{
+  "name": "ANNI GOLD MUSIC",
+  "short_name": "Anni Gold",
+  "description": "Deine Musik. Deine Bühne. Dein Moment.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#d4af37",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

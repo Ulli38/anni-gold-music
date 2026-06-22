@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ANNI GOLD MUSIC - Song einreichen</title>
+
+  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#d4af37">
+</head>
+
+<body>
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament left-ornament"
+    alt=""
+  >
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament right-ornament"
+    alt=""
+  >
+
+  <script>
+    if (localStorage.getItem("communityAccess") !== "true") {
+      window.location.href = "community.html";
+    }
+  </script>
+
+  <main class="container">
+
+    <header class="upload-header">
+
+      <div class="logo-container">
+        <img
+          src="assets/assets/anni-logo.png"
+          alt="ANNI GOLD MUSIC"
+          class="anni-logo"
+        >
+      </div>
+
+      <h1>
+        <span class="gold-icon">𝄞</span>
+        Song einreichen
+      </h1>
+
+      <p>
+        Reiche deinen Song für die nächste LIVE-Show ein.
+      </p>
+
+    </header>
+
+    <form id="uploadForm" class="card">
+
+      <label for="kuenstlername">
+        Künstlername
+      </label>
+
+      <input
+        type="text"
+        id="kuenstlername"
+        placeholder="Artist Name"
+        required
+      >
+
+      <label for="einreichername">
+        Name des Einreichers
+      </label>
+
+      <input
+        type="text"
+        id="einreichername"
+        placeholder="Dein Name"
+        required
+      >
+
+      <label for="songtitel">
+        Songtitel
+      </label>
+
+      <input
+        type="text"
+        id="songtitel"
+        placeholder="Songtitel eingeben"
+        required
+      >
+
+      <label for="beschreibung">
+        Songbeschreibung
+      </label>
+
+      <textarea
+        id="beschreibung"
+        placeholder="Erzähl etwas über deinen Song"
+        required
+      ></textarea>
+
+      <label for="genre">
+        Genre
+      </label>
+
+      <select id="genre" required>
+        <option value="">Bitte Genre auswählen</option>
+        <option value="Pop">Pop</option>
+        <option value="Dance">Dance</option>
+        <option value="Rock">Rock</option>
+        <option value="Hip-Hop">Hip-Hop</option>
+        <option value="Schlager">Schlager</option>
+        <option value="Ballade">Ballade</option>
+        <option value="Reggae">Reggae</option>
+        <option value="Viking">Viking</option>
+        <option value="Techno">Techno</option>
+        <option value="Elektronic">Elektronic</option>
+        <option value="Latin">Latin</option>
+        <option value="Jazz">Jazz</option>
+        <option value="Classic">Classic</option>
+        <option value="RnB">RnB</option>
+        <option value="Soul">Soul</option>
+      </select>
+
+      <label for="liveDay">
+        Gewünschter LIVE-Tag
+      </label>
+
+      <select id="liveDay" required>
+        <option value="">Bitte LIVE-Tag auswählen</option>
+        <option value="Montag">Montag</option>
+        <option value="Mittwoch">Mittwoch</option>
+        <option value="Freitag">Freitag</option>
+      </select>
+
+      <div class="upload-rules">
+
+        <h3>📋 Upload-Regeln</h3>
+
+        <p>🎵 Nur MP3-Dateien</p>
+        <p>⏱️ Maximale Songlänge: 4 Minuten 45 Sekunden</p>
+        <p>💾 Maximale Dateigröße: 10 MB</p>
+        <p>📅 Nur 1 Song pro Künstler und LIVE-Tag</p>
+        <p>🎤 Maximal 20 Songs pro LIVE-Tag</p>
+
+      </div>
+
+      <label for="songDatei">
+        Datei hochladen
+      </label>
+
+      <label class="file-label" for="songDatei">
+        📁 Datei auswählen
+      </label>
+
+      <input
+        type="file"
+        id="songDatei"
+        accept=".mp3,audio/mpeg"
+      >
+
+      <label for="spotifyLink">
+        Spotify-Link (optional)
+      </label>
+
+      <input
+        type="text"
+        id="spotifyLink"
+        placeholder="https://open.spotify.com/track/..."
+      >
+
+      <button type="submit">
+        Song einreichen
+      </button>
+
+      <div id="status" class="status"></div>
+
+    </form>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+  <script src="pwa.js?v=4"></script>
+</body>
+
+</html>

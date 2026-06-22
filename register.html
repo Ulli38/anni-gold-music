@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Registrierung | ANNI GOLD MUSIC</title>
+
+  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#d4af37">
+</head>
+
+<body>
+
+  <!-- Goldene Seitenornamente -->
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament left-ornament"
+    alt=""
+    aria-hidden="true"
+  >
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament right-ornament"
+    alt=""
+    aria-hidden="true"
+  >
+
+  <main class="container">
+
+    <form id="registerForm" class="card">
+
+      <!-- Logo -->
+      <div class="logo-container">
+        <img
+          src="assets/assets/anni-logo.png"
+          alt="ANNI GOLD MUSIC"
+          class="anni-logo"
+        >
+      </div>
+
+      <h1>
+        <span class="gold-icon">👤</span>
+        Registrierung
+      </h1>
+
+      <p>
+        Erstelle jetzt dein kostenloses Künstlerkonto bei Anni Gold Music.
+      </p>
+
+      <label for="artistName">Künstlername</label>
+      <input
+        type="text"
+        id="artistName"
+        placeholder="Dein Künstlername"
+        autocomplete="nickname"
+        required
+      >
+
+      <label for="username">Benutzername</label>
+      <input
+        type="text"
+        id="username"
+        placeholder="Dein Benutzername"
+        autocomplete="username"
+        required
+      >
+
+      <label for="email">E-Mail</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="deine@email.de"
+        autocomplete="email"
+        required
+      >
+
+      <label for="password">Passwort</label>
+
+      <div class="password-box">
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Passwort eingeben"
+          autocomplete="new-password"
+          required
+        >
+
+        <span
+          class="toggle-password"
+          onclick="togglePassword('password', this)"
+          role="button"
+          tabindex="0"
+          aria-label="Passwort anzeigen oder ausblenden"
+        >
+          👁️
+        </span>
+
+      </div>
+
+      <div
+        id="passwordStrength"
+        class="password-strength"
+      ></div>
+
+      <label for="discord">Discord-Name (optional)</label>
+      <input
+        type="text"
+        id="discord"
+        placeholder="Dein Discord-Name"
+      >
+
+      <label for="tiktok">TikTok-Name (optional)</label>
+      <input
+        type="text"
+        id="tiktok"
+        placeholder="@deinname"
+      >
+
+      <label class="checkbox-label">
+
+        <input
+          type="checkbox"
+          id="termsAccepted"
+          required
+        >
+
+        <span>
+          Ich akzeptiere die
+          <a
+            href="agb.html"
+            target="_blank"
+            rel="noopener"
+          >
+            AGB
+          </a>
+
+          und die
+
+          <a
+            href="datenschutz.html"
+            target="_blank"
+            rel="noopener"
+          >
+            Datenschutzerklärung
+          </a>.
+        </span>
+
+      </label>
+
+      <button type="submit">
+        Registrieren
+      </button>
+
+      <p class="form-link">
+        Bereits registriert?
+        <a href="login.html">
+          Jetzt anmelden
+        </a>
+      </p>
+
+      <p class="form-link">
+        <a href="forgot-password.html">
+          🔑 Passwort vergessen?
+        </a>
+      </p>
+
+      <div
+        id="status"
+        class="status"
+        aria-live="polite"
+      ></div>
+
+    </form>
+
+  </main>
+
+  <footer class="footer-links">
+
+    <p>© 2026 ANNI GOLD MUSIC</p>
+
+    <div>
+      <a href="agb.html">AGB</a>
+
+      <span>•</span>
+
+      <a href="datenschutz.html">
+        Datenschutz
+      </a>
+
+      <span>•</span>
+
+      <a href="impressum.html">
+        Impressum
+      </a>
+    </div>
+
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+
+  <script>
+    function togglePassword(id, icon) {
+      const input = document.getElementById(id);
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "🙈";
+      } else {
+        input.type = "password";
+        icon.textContent = "👁️";
+      }
+    }
+  </script>
+
+</body>
+
+</html>

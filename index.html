@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ANNI GOLD MUSIC</title>
+
+  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#d4af37">
+</head>
+
+<body>
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament left-ornament"
+    alt=""
+    aria-hidden="true"
+  >
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament right-ornament"
+    alt=""
+    aria-hidden="true"
+  >
+
+  <main class="container">
+
+    <form class="card" onsubmit="return false;">
+
+      <div class="logo-container">
+        <img
+          src="assets/assets/anni-logo.png"
+          alt="ANNI GOLD MUSIC"
+          class="anni-logo"
+        >
+      </div>
+
+      <h1>ANNI GOLD MUSIC</h1>
+
+      <h2>
+        <span class="gold-icon">🔐</span>
+        Community-Zugang
+      </h2>
+
+      <p>
+        Bitte gib deinen Community-Code ein.
+      </p>
+
+      <label for="communityCode">
+        Community-Code
+      </label>
+
+      <input
+        type="password"
+        id="communityCode"
+        placeholder="Community-Code"
+        autocomplete="off"
+        required
+      >
+
+      <button
+        type="button"
+        onclick="pruefeCode()">
+        Freischalten
+      </button>
+
+      <p
+        id="meldung"
+        class="status"
+        aria-live="polite"
+      ></p>
+
+    </form>
+
+  </main>
+
+  <footer class="footer-links">
+
+    <p>© 2026 ANNI GOLD MUSIC</p>
+
+    <div>
+      <a href="agb.html">AGB</a>
+      <span>•</span>
+      <a href="datenschutz.html">Datenschutz</a>
+      <span>•</span>
+      <a href="impressum.html">Impressum</a>
+    </div>
+
+  </footer>
+
+  <script src="community.js"></script>
+ <script src="pwa.js?v=4"></script>
+ 
+</body>
+
+</html>

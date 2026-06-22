@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LIVE Playlist | ANNI GOLD MUSIC</title>
+
+  <link rel="stylesheet" href="style.css?v=4"> 
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#d4af37">
+</head>
+
+<body>
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament left-ornament"
+    alt=""
+  >
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament right-ornament"
+    alt=""
+  >
+
+  <main class="container">
+
+    <header class="upload-header">
+
+      <div class="logo-container">
+        <img
+          src="assets/assets/anni-logo.png"
+          alt="ANNI GOLD MUSIC"
+          class="anni-logo"
+        >
+      </div>
+
+      <h1>
+        <span class="gold-icon">𝄞</span>
+        Heute im LIVE
+      </h1>
+
+      <p>
+        Diese Songs sind für den aktuellen TikTok LIVE Stream geplant.
+      </p>
+
+    </header>
+
+    <div
+      id="liveListe"
+      aria-live="polite"
+    ></div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const supabaseUrl =
+      "https://ktnalbuhlfrmgkmivubj.supabase.co";
+
+    const supabaseKey =
+      "sb_publishable_TmTgUV4k6o6bR8ik21EiDg_7BvGKYb4";
+
+    const supabaseClient = window.supabase.createClient(
+      supabaseUrl,
+      supabaseKey
+    );
+
+    const liveListe = document.getElementById("liveListe");
+
+    async function liveSongsLaden() {
+      liveListe.innerHTML =
+        '<p class="status">LIVE-Songs werden geladen ...</p>';
+
+      const { data, error } = await supabaseClient
+        .from("Songs")
+        .select("*")
+        .eq("status", "Heute im LIVE");
+
+      if (error) {
+        console.error("Fehler beim Laden:", error);
+
+        liveListe.innerHTML =
+          '<p class="status">Die LIVE-Songs konnten nicht geladen werden.</p>';
+
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        liveListe.innerHTML =
+          '<p class="status">Aktuell keine Songs im LIVE.</p>';
+
+        return;
+      }
+
+      liveListe.innerHTML = "";
+
+      data.forEach(function (song) {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const titel = document.createElement("h2");
+        titel.textContent = song.songtitel || "Unbekannter Song";
+
+        const kuenstler = document.createElement("p");
+        kuenstler.innerHTML = "<strong>Künstler:</strong> ";
+
+        const kuenstlerText = document.createTextNode(
+          song.kuenstlername || "Unbekannt"
+        );
+
+        kuenstler.appendChild(kuenstlerText);
+
+        const einreicher = document.createElement("p");
+        einreicher.innerHTML = "<strong>Einreicher:</strong> ";
+
+        const einreicherText = document.createTextNode(
+          song.einreichename || "Unbekannt"
+        );
+
+        einreicher.appendChild(einreicherText);
+
+        const beschreibung = document.createElement("p");
+        beschreibung.innerHTML = "<strong>Beschreibung:</strong> ";
+
+        const beschreibungText = document.createTextNode(
+          song.beschreibung || "Keine Beschreibung vorhanden."
+        );
+
+        beschreibung.appendChild(beschreibungText);
+
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        audio.src = song.audio_url;
+        audio.style.width = "100%";
+        audio.style.marginTop = "15px";
+
+        audio.onended = async function () {
+          const { error } = await supabaseClient
+            .from("Songs")
+            .update({
+              status: "Bereits gespielt"
+            })
+            .eq("id", song.id);
+
+          if (error) {
+            console.error(
+              "Fehler beim Aktualisieren:",
+              error
+            );
+
+            alert(
+              "Fehler beim Aktualisieren: " +
+              error.message
+            );
+
+            return;
+          }
+
+          liveSongsLaden();
+        };
+
+        card.appendChild(titel);
+        card.appendChild(kuenstler);
+        card.appendChild(einreicher);
+        card.appendChild(beschreibung);
+        card.appendChild(audio);
+
+        liveListe.appendChild(card);
+      });
+    }
+
+    liveSongsLaden();
+  </script>
+
+ <script src="pwa.js?v=4"></script>
+
+</body>
+
+</html>
