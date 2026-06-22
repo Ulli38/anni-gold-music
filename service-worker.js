@@ -1,4 +1,4 @@
-const CACHE_NAME = "anni-gold-music-v2";
+const CACHE_NAME = "anni-gold-music-v5";
 
 const APP_DATEIEN = [
   "./",
