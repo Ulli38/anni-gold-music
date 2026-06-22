@@ -9,9 +9,9 @@ const supabaseClient = window.supabase.createClient(
   supabaseKey
 );
 
-const appUrl =
-  "https://anni-gold-music.netlify.app";
 
+ const appUrl =
+  "https://ulli38.github.io/anni-gold-music";
 
 /* =========================================
    HILFSFUNKTIONEN
@@ -414,7 +414,7 @@ async function passwortResetSenden() {
           {
             redirectTo:
               appUrl +
-              "/new-password.html"
+              appUrl + "/reset.html"
           }
         );
 
