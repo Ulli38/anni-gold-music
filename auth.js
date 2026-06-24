@@ -413,7 +413,6 @@ async function passwortResetSenden() {
           email,
           {
             redirectTo:
-              appUrl +
               appUrl + "/reset.html"
           }
         );
