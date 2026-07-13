@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Mini</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+body{
+    margin:0;
+    background:transparent;
+    font-family:Montserrat,sans-serif;
+    overflow:hidden;
+}
+
+#overlay{
+    width:360px;
+    padding:12px 18px;
+
+    background:rgba(0,0,0,.78);
+
+    border:2px solid #d4af37;
+
+    border-radius:18px;
+
+    color:white;
+
+    backdrop-filter:blur(10px);
+}
+
+h1{
+    margin:0;
+    color:#d4af37;
+    font-size:17px;
+    font-family:Cinzel,serif;
+}
+
+#titel{
+    font-size:22px;
+    font-weight:bold;
+    line-height:1.2;
+}
+
+#artist{
+    margin-top:4px;
+    font-size:16px;
+    color:#d4af37;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="overlay">
+
+<div id="titel">Warte auf Song...</div>
+
+<div id="artist"></div>
+
+</div>
+
+<script>
+
+const supabaseClient = window.supabase.createClient(
+"https://ktnalbuhlfrmgkmivubj.supabase.co",
+"sb_publishable_TmTgUV4k6o6bR8ik21EiDg_7BvGKYb4"
+);
+
+const titel=document.getElementById("titel");
+const artist=document.getElementById("artist");
+
+async function ladeSong(){
+
+const { data } = await supabaseClient
+.from("Songs")
+.select("*")
+.eq("status","Heute im LIVE")
+.order("id",{ascending:true})
+.limit(1);
+
+if(data && data.length>0){
+
+titel.textContent=data[0].songtitel;
+
+artist.textContent=data[0].kuenstlername;
+
+}else{
+
+titel.textContent="Momentan kein Song";
+
+artist.textContent="";
+
+}
+
+}
+
+ladeSong();
+
+setInterval(ladeSong,3000);
+
+</script>
+
+</body>
+</html>
