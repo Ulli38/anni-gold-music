@@ -21,7 +21,9 @@ const AKTIVE_STATUS = [
 ];
 
 const MAX_SONGS_PRO_TAG = 20;
-const MAX_DATEIGROESSE = 10 * 1024 * 1024;
+const LIVE_START_STUNDE = 20;
+const BERLIN_ZEITZONE = "Europe/Berlin";
+const MAX_DATEIGROESSE = 12 * 1024 * 1024;
 const MAX_SONGDAUER = 285;
 
 const form = document.getElementById("uploadForm");
@@ -227,7 +229,7 @@ if (form) {
       await supabaseClient
         .from("Songs")
         .select(
-          "id, kuenstlername, live_day, status"
+        "id, kuenstlername, live_day, status, created_at" 
         )
         .in("status", AKTIVE_STATUS);
 
@@ -238,7 +240,129 @@ if (form) {
     return data || [];
   }
 
+function berlinDatumsteile(datum = new Date()) {
+  const teile = new Intl.DateTimeFormat(
+    "de-DE",
+    {
+      timeZone: BERLIN_ZEITZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }
+  ).formatToParts(datum);
 
+  const werte = {};
+
+  teile.forEach(function (teil) {
+    if (teil.type !== "literal") {
+      werte[teil.type] = teil.value;
+    }
+  });
+
+  const wochentage = {
+    So: 0,
+    Mo: 1,
+    Di: 2,
+    Mi: 3,
+    Do: 4,
+    Fr: 5,
+    Sa: 6
+  };
+
+  return {
+    jahr: Number(werte.year),
+    monat: Number(werte.month),
+    tag: Number(werte.day),
+    wochentag: wochentage[werte.weekday],
+    stunde: Number(werte.hour),
+    minute: Number(werte.minute)
+  };
+}
+
+
+function wochenStartSchluessel(datum = new Date()) {
+  const teile = berlinDatumsteile(datum);
+
+  const datumUtc = new Date(
+    Date.UTC(
+      teile.jahr,
+      teile.monat - 1,
+      teile.tag
+    )
+  );
+
+  const tageSeitMontag =
+    (teile.wochentag + 6) % 7;
+
+  datumUtc.setUTCDate(
+    datumUtc.getUTCDate() - tageSeitMontag
+  );
+
+  return datumUtc.toISOString().slice(0, 10);
+}
+
+
+function istLiveTagZeitlichGeschlossen(
+  liveTag,
+  aktiveSongs,
+  jetzt = new Date()
+) {
+  const jetztTeile = berlinDatumsteile(jetzt);
+
+  // Nach der Sonntagslöschung werden die Tage
+  // wieder für die neue Woche freigegeben.
+  if (
+    jetztTeile.wochentag === 0 &&
+    aktiveSongs.length === 0
+  ) {
+    return false;
+  }
+
+  const aktuelleWoche =
+    wochenStartSchluessel(jetzt);
+
+  const alteWocheNochVorhanden =
+    aktiveSongs.some(function (song) {
+      if (!song.created_at) {
+        return false;
+      }
+
+      return (
+        wochenStartSchluessel(
+          new Date(song.created_at)
+        ) < aktuelleWoche
+      );
+    });
+
+  // Solange alte Songs nicht sonntags gelöscht wurden,
+  // bleibt die Einreichung geschlossen.
+  if (alteWocheNochVorhanden) {
+    return true;
+  }
+
+  const liveWochentage = {
+    Montag: 1,
+    Mittwoch: 3,
+    Freitag: 5
+  };
+
+  const liveWochentag =
+    liveWochentage[liveTag];
+
+  if (jetztTeile.wochentag > liveWochentag) {
+    return true;
+  }
+
+  if (jetztTeile.wochentag < liveWochentag) {
+    return false;
+  }
+
+  return jetztTeile.stunde >= LIVE_START_STUNDE;
+}
   async function liveTagePruefen() {
     if (!liveDaySelect) {
       return;
@@ -269,20 +393,38 @@ if (form) {
           }
         ).length;
 
-        if (anzahl >= MAX_SONGS_PRO_TAG) {
-          const option =
-            Array.from(
-              liveDaySelect.options
-            ).find(function (eintrag) {
-              return eintrag.value === tag;
-            });
+       const zeitlichGeschlossen =
+  istLiveTagZeitlichGeschlossen(
+    tag,
+    aktiveSongs
+  );
 
-          if (option) {
-            option.disabled = true;
-            option.textContent =
-              tag + " – geschlossen";
-          }
-        }
+if (
+  anzahl >= MAX_SONGS_PRO_TAG ||
+  zeitlichGeschlossen
+) {
+  const option =
+    Array.from(
+      liveDaySelect.options
+    ).find(function (eintrag) {
+      return eintrag.value === tag;
+    });
+
+  if (option) {
+    option.disabled = true;
+    option.textContent =
+      tag + " – 🔒 geschlossen";
+
+    if (liveDaySelect.value === tag) {
+      liveDaySelect.value = "";
+
+      statusAnzeigen(
+        "🔒 Der Live-Tag ist geschlossen. Neue Songwünsche sind erst nach der Sonntagslöschung wieder möglich.",
+        "fehler"
+      );
+    }
+  }
+}
       });
 
     } catch (error) {
@@ -452,7 +594,18 @@ if (form) {
               return song.live_day === liveDay;
             }
           );
-
+          if (
+  istLiveTagZeitlichGeschlossen(
+    liveDay,
+    aktiveSongs
+  )
+) {
+  throw new Error(
+    "🔒 Der Live-Tag " +
+    liveDay +
+    " ist geschlossen. Neue Songwünsche sind erst nach der Sonntagslöschung wieder möglich."
+  );
+}
         if (
           songsAmTag.length >=
           MAX_SONGS_PRO_TAG
@@ -645,4 +798,8 @@ if (form) {
 
 
   liveTagePruefen();
+
+setInterval(function () {
+  liveTagePruefen();
+}, 60 * 1000);
 }
