@@ -23,7 +23,7 @@ const AKTIVE_STATUS = [
 const MAX_SONGS_PRO_TAG = 20;
 const LIVE_START_STUNDE = 20;
 const BERLIN_ZEITZONE = "Europe/Berlin";
-const MAX_DATEIGROESSE = 12 * 1024 * 1024;
+const MAX_DATEIGROESSE = 10 * 1024 * 1024;
 const MAX_SONGDAUER = 285;
 
 const form = document.getElementById("uploadForm");
