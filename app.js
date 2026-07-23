@@ -360,6 +360,15 @@ function istLiveTagZeitlichGeschlossen(
     });
 
   if (alteWocheNochVorhanden) {
+    console.log("Aktuelle Woche:", aktuelleWoche);
+
+aktiveSongs.forEach(function (song) {
+  console.log({
+    kuenstler: song.kuenstlername,
+    created_at: song.created_at,
+    songWoche: wochenStartSchluessel(song.created_at)
+  });
+});
     return true;
   }
 
