@@ -248,7 +248,7 @@ function berlinDatumsteile(datum = new Date()) {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
-      weekday: "short",
+      weekday: "long",
       hour: "2-digit",
       minute: "2-digit",
       hourCycle: "h23"
@@ -264,13 +264,13 @@ function berlinDatumsteile(datum = new Date()) {
   });
 
   const wochentage = {
-    So: 0,
-    Mo: 1,
-    Di: 2,
-    Mi: 3,
-    Do: 4,
-    Fr: 5,
-    Sa: 6
+    Sonntag: 0,
+    Montag: 1,
+    Dienstag: 2,
+    Mittwoch: 3,
+    Donnerstag: 4,
+    Freitag: 5,
+    Samstag: 6
   };
 
   return {
@@ -285,7 +285,25 @@ function berlinDatumsteile(datum = new Date()) {
 
 
 function wochenStartSchluessel(datum = new Date()) {
-  const teile = berlinDatumsteile(datum);
+  const echtesDatum =
+    datum instanceof Date
+      ? datum
+      : new Date(datum);
+
+  if (Number.isNaN(echtesDatum.getTime())) {
+    return null;
+  }
+
+  const teile = berlinDatumsteile(echtesDatum);
+
+  if (
+    !Number.isFinite(teile.jahr) ||
+    !Number.isFinite(teile.monat) ||
+    !Number.isFinite(teile.tag) ||
+    !Number.isFinite(teile.wochentag)
+  ) {
+    return null;
+  }
 
   const datumUtc = new Date(
     Date.UTC(
@@ -302,7 +320,9 @@ function wochenStartSchluessel(datum = new Date()) {
     datumUtc.getUTCDate() - tageSeitMontag
   );
 
-  return datumUtc.toISOString().slice(0, 10);
+  return datumUtc
+    .toISOString()
+    .slice(0, 10);
 }
 
 
@@ -311,15 +331,11 @@ function istLiveTagZeitlichGeschlossen(
   aktiveSongs,
   jetzt = new Date()
 ) {
-  const jetztTeile = berlinDatumsteile(jetzt);
+  const jetztTeile =
+    berlinDatumsteile(jetzt);
 
-  // Nach der Sonntagslöschung werden die Tage
-  // wieder für die neue Woche freigegeben.
-  if (
-    jetztTeile.wochentag === 0 &&
-    aktiveSongs.length === 0
-  ) {
-    return false;
+  if (jetztTeile.wochentag === 0) {
+    return aktiveSongs.length > 0;
   }
 
   const aktuelleWoche =
@@ -331,15 +347,18 @@ function istLiveTagZeitlichGeschlossen(
         return false;
       }
 
-      return (
+      const songWoche =
         wochenStartSchluessel(
-          new Date(song.created_at)
-        ) < aktuelleWoche
+          song.created_at
+        );
+
+      return (
+        songWoche !== null &&
+        aktuelleWoche !== null &&
+        songWoche < aktuelleWoche
       );
     });
 
-  // Solange alte Songs nicht sonntags gelöscht wurden,
-  // bleibt die Einreichung geschlossen.
   if (alteWocheNochVorhanden) {
     return true;
   }
@@ -353,15 +372,24 @@ function istLiveTagZeitlichGeschlossen(
   const liveWochentag =
     liveWochentage[liveTag];
 
-  if (jetztTeile.wochentag > liveWochentag) {
+  if (
+    jetztTeile.wochentag >
+    liveWochentag
+  ) {
     return true;
   }
 
-  if (jetztTeile.wochentag < liveWochentag) {
+  if (
+    jetztTeile.wochentag <
+    liveWochentag
+  ) {
     return false;
   }
 
-  return jetztTeile.stunde >= LIVE_START_STUNDE;
+  return (
+    jetztTeile.stunde >=
+    LIVE_START_STUNDE
+  );
 }
   async function liveTagePruefen() {
     if (!liveDaySelect) {
@@ -803,3 +831,4 @@ setInterval(function () {
   liveTagePruefen();
 }, 60 * 1000);
 }
+
