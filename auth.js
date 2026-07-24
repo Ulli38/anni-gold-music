@@ -129,6 +129,7 @@ if (registerForm) {
               data: {
                 artist_name: artistName,
                 username: username,
+                email: email, 
                 discord: discord,
                 tiktok: tiktok
               },
