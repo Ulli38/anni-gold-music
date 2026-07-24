@@ -325,52 +325,12 @@ function wochenStartSchluessel(datum = new Date()) {
     .slice(0, 10);
 }
 
-
 function istLiveTagZeitlichGeschlossen(
   liveTag,
-  aktiveSongs,
   jetzt = new Date()
 ) {
   const jetztTeile =
     berlinDatumsteile(jetzt);
-
-  if (jetztTeile.wochentag === 0) {
-    return aktiveSongs.length > 0;
-  }
-
-  const aktuelleWoche =
-    wochenStartSchluessel(jetzt);
-
-  const alteWocheNochVorhanden =
-    aktiveSongs.some(function (song) {
-      if (!song.created_at) {
-        return false;
-      }
-
-      const songWoche =
-        wochenStartSchluessel(
-          song.created_at
-        );
-
-      return (
-        songWoche !== null &&
-        aktuelleWoche !== null &&
-        songWoche < aktuelleWoche
-      );
-    });
-
-  if (alteWocheNochVorhanden) {
-    console.log("Aktuelle Woche:", aktuelleWoche);
-
-aktiveSongs.forEach(function (song) {
-  console.log({
-    kuenstler: song.kuenstlername,
-    created_at: song.created_at,
-    songWoche: wochenStartSchluessel(song.created_at)
-  });
-});
-    return true;
-  }
 
   const liveWochentage = {
     Montag: 1,
@@ -430,12 +390,8 @@ aktiveSongs.forEach(function (song) {
           }
         ).length;
 
-       const zeitlichGeschlossen =
-  istLiveTagZeitlichGeschlossen(
-    tag,
-    aktiveSongs
-  );
-
+const zeitlichGeschlossen =
+  istLiveTagZeitlichGeschlossen(tag);
 if (
   anzahl >= MAX_SONGS_PRO_TAG ||
   zeitlichGeschlossen
@@ -633,8 +589,7 @@ if (
           );
           if (
   istLiveTagZeitlichGeschlossen(
-    liveDay,
-    aktiveSongs
+    liveDay
   )
 ) {
   throw new Error(
@@ -840,4 +795,3 @@ setInterval(function () {
   liveTagePruefen();
 }, 60 * 1000);
 }
-
