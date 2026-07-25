@@ -122,7 +122,24 @@
     >
       🚪 Logout
     </button>
-
+<button
+  type="button"
+  onclick="mitgliederInformieren()"
+  style="
+    float:right;
+    margin-right:10px;
+    background:#1e40af;
+    color:#fff;
+    border:none;
+    padding:10px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:bold;
+    box-shadow:0 0 15px rgba(30,64,175,0.4);
+  "
+>
+  📧 Mitglieder informieren
+</button>
     <div
       class="card stats-grid"
       style="clear:both;"
@@ -670,52 +687,79 @@
 
       await songsLaden();
     }
-
     async function adminCodePruefen() {
-      const code = document.getElementById(
-        "adminCodeInput"
-      ).value;
+  const code = document.getElementById(
+    "adminCodeInput"
+  ).value;
 
-      const fehler = document.getElementById(
-        "adminFehler"
-      );
+  const fehler = document.getElementById(
+    "adminFehler"
+  );
 
-      if (code === "ADMIN2026") {
-        fehler.textContent = "";
+  if (code === "ADMIN2026") {
+    fehler.textContent = "";
 
-        document.getElementById(
-          "adminLogin"
-        ).style.display = "none";
+    document.getElementById(
+      "adminLogin"
+    ).style.display = "none";
 
-        document.getElementById(
-          "adminBereich"
-        ).style.display = "block";
+    document.getElementById(
+      "adminBereich"
+    ).style.display = "block";
 
-        await songsLaden();
-      } else {
-        fehler.textContent =
-          "Falscher Admin-Code.";
+    await songsLaden();
+  } else {
+    fehler.textContent =
+      "Falscher Admin-Code.";
+  }
+}
+
+function logoutAdmin() {
+  document.getElementById(
+    "adminBereich"
+  ).style.display = "none";
+
+  document.getElementById(
+    "adminLogin"
+  ).style.display = "block";
+
+  document.getElementById(
+    "adminCodeInput"
+  ).value = "";
+
+  document.getElementById(
+    "adminFehler"
+  ).textContent = "";
+}
+async function mitgliederInformieren() {
+
+  const passwort = prompt("Passwort für den E-Mail-Versand:");
+
+  if (!passwort) {
+    return;
+  }
+
+  if (!confirm("Möchtest du die Mitglieder jetzt wirklich per E-Mail informieren?")) {
+    return;
+  }
+
+  const { data, error } = await supabaseClient.functions.invoke(
+    "send-community-email",
+    {
+      body: {
+        password: passwort
       }
     }
+  );
 
-    function logoutAdmin() {
-      document.getElementById(
-        "adminBereich"
-      ).style.display = "none";
+  if (error) {
+    alert("Versand fehlgeschlagen. Passwort prüfen.");
+    console.error(error);
+    return;
+  }
 
-      document.getElementById(
-        "adminLogin"
-      ).style.display = "block";
-
-      document.getElementById(
-        "adminCodeInput"
-      ).value = "";
-
-      document.getElementById(
-        "adminFehler"
-      ).textContent = "";
-    }
-
+  alert(`E-Mail wurde erfolgreich an ${data.anzahl} Mitglieder versendet.`);
+}
     document.getElementById(
       "adminCodeInput"
     ).addEventListener(
@@ -726,6 +770,7 @@
         }
       }
     );
+   
   </script>
 
   <script src="pwa.js?v=4"></script>
