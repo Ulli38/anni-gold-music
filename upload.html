@@ -92,7 +92,7 @@
       >
 
       <label for="beschreibung">
-        Songbeschreibung
+        Songbeschreibung (max. 120 Wörter)
       </label>
 
       <textarea
@@ -100,7 +100,7 @@
         placeholder="Erzähl etwas über deinen Song"
         required
       ></textarea>
-
+<div id="beschreibungCounter">0 / 120 Wörter</div>
       <label for="genre">
         Genre
       </label>
@@ -129,6 +129,34 @@
         <option value="Funk">Funk</option>
         <option value="Trap">Trap</option>
       </select>
+<label for="genre2">
+  Zweites Genre (optional)
+</label>
+
+<select id="genre2">
+  <option value="">Kein zweites Genre</option>
+  <option value="Pop">Pop</option>
+  <option value="Dance">Dance</option>
+  <option value="Rock">Rock</option>
+  <option value="Hip-Hop">Hip-Hop</option>
+  <option value="Schlager">Schlager</option>
+  <option value="Ballade">Ballade</option>
+  <option value="Reggae">Reggae</option>
+  <option value="Viking">Viking</option>
+  <option value="Techno">Techno</option>
+  <option value="Elektronic">Elektronic</option>
+  <option value="Latin">Latin</option>
+  <option value="Jazz">Jazz</option>
+  <option value="Classic">Classic</option>
+  <option value="RnB">RnB</option>
+  <option value="Soul">Soul</option>
+  <option value="Country">Country</option>
+  <option value="Indie">Indie</option>
+  <option value="DeutschRap">DeutschRap</option>
+  <option value="House">House</option>
+  <option value="Funk">Funk</option>
+  <option value="Trap">Trap</option>
+</select>
 
       <label for="liveDay">
         Gewünschter LIVE-Tag
@@ -187,9 +215,26 @@
 
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=4"></script>
-  <script src="pwa.js?v=4"></script>
-</body>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const beschreibung = document.getElementById("beschreibung");
+  const beschreibungCounter = document.getElementById("beschreibungCounter");
+
+  beschreibung.addEventListener("input", () => {
+    let text = beschreibung.value.trim();
+    let woerter = text ? text.split(/\s+/) : [];
+
+    if (woerter.length > 120) {
+      woerter = woerter.slice(0, 120);
+      beschreibung.value = woerter.join(" ");
+    }
+
+    beschreibungCounter.textContent = `${woerter.length} / 120 Wörter`;
+  });
+</script>
+
+<script src="app.js?v=4"></script>
+<script src="pwa.js?v=4"></script>
 
 </html>

@@ -485,11 +485,24 @@ if (
           ? beschreibungInput.value.trim()
           : "";
 
-      const genre =
-        genreSelect
-          ? genreSelect.value
-          : "";
+      const genre1 =
+  genreSelect
+    ? genreSelect.value
+    : "";
 
+const genre2Select = document.getElementById("genre2");
+
+const genre2 =
+  genre2Select
+    ? genre2Select.value
+    : "";
+
+const genre =
+  genre2
+    ? `${genre1} / ${genre2}`
+    : genre1;
+
+    
       const liveDay =
         liveDaySelect
           ? liveDaySelect.value
