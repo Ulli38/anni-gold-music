@@ -21,7 +21,8 @@ const AKTIVE_STATUS = [
 ];
 
 const MAX_SONGS_PRO_TAG = 20;
-const LIVE_START_STUNDE = 20;
+const LIVE_START_STUNDE = 19;
+const LIVE_START_MINUTE = 30;
 const BERLIN_ZEITZONE = "Europe/Berlin";
 const MAX_DATEIGROESSE = 10 * 1024 * 1024;
 const MAX_SONGDAUER = 285;
@@ -356,10 +357,13 @@ function istLiveTagZeitlichGeschlossen(
   }
 
   return (
-    jetztTeile.stunde >=
-    LIVE_START_STUNDE
-  );
-}
+  jetztTeile.stunde > LIVE_START_STUNDE ||
+  (
+    jetztTeile.stunde === LIVE_START_STUNDE &&
+    jetztTeile.minute >= LIVE_START_MINUTE
+  )
+);}
+
   async function liveTagePruefen() {
     if (!liveDaySelect) {
       return;
