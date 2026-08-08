@@ -862,12 +862,99 @@ if (
 ) {
 
   meineSongsButton.addEventListener(
-    "click",
-    function () {
-      meineSongsModal.classList.add("open");
+  "click",
+  async function () {
+    meineSongsModal.classList.add("open");
+
+    const liste =
+      document.getElementById("meineSongsListe");
+
+    liste.innerHTML =
+      "<p>Deine Songs werden geladen...</p>";
+
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      liste.innerHTML =
+        "<p>Du bist nicht angemeldet.</p>";
+      return;
+    }
+
+    const { data, error } =
+      await supabaseClient
+        .from("song_history")
+        .select(
+          "songtitel, created_at, gespielt"
+        )
+        .eq("user_id", user.id)
+        .order("created_at", {
+          ascending: false
+        });
+
+    if (error) {
+      console.error(
+        "Fehler beim Laden der Song-Historie:",
+        error
+      );
+
+      liste.innerHTML =
+        "<p>Fehler beim Laden deiner Songs.</p>";
+
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      liste.innerHTML =
+        "<p>Du hast noch keine Songs eingereicht.</p>";
+
+      return;
+    }
+
+    liste.innerHTML = "";
+
+    data.forEach(function (song) {
+     const datum = new Date(song.created_at);
+
+const datumText =
+  datum.toLocaleDateString(
+    "de-DE",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
     }
   );
 
+     const status =
+  song.gespielt
+    ? "🟢 Bereits gespielt"
+    : "🟡 Wartet auf LIVE";
+
+      const eintrag =
+        document.createElement("div");
+
+      eintrag.className =
+        "meine-song-zeile";
+
+      eintrag.innerHTML =
+  '<div class="meine-song-titel">🎵 ' +
+  song.songtitel +
+  '</div>' +
+
+  '<div class="meine-song-meta">📅 ' +
+  datumText +
+  '</div>' +
+
+  '<div class="meine-song-meta">' +
+  status +
+  '</div>';
+
+      liste.appendChild(eintrag);
+    });
+  }
+);
   meineSongsSchliessen.addEventListener(
     "click",
     function () {
