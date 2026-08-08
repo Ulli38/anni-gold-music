@@ -842,3 +842,48 @@ setInterval(function () {
   liveTagePruefen();
 }, 60 * 1000);
 }
+/* =========================================
+   MEINE SONGS MODAL
+========================================= */
+
+const meineSongsButton =
+  document.getElementById("meineSongsButton");
+
+const meineSongsModal =
+  document.getElementById("meineSongsModal");
+
+const meineSongsSchliessen =
+  document.getElementById("meineSongsSchliessen");
+
+if (
+  meineSongsButton &&
+  meineSongsModal &&
+  meineSongsSchliessen
+) {
+
+  meineSongsButton.addEventListener(
+    "click",
+    function () {
+      meineSongsModal.classList.add("open");
+    }
+  );
+
+  meineSongsSchliessen.addEventListener(
+    "click",
+    function () {
+      meineSongsModal.classList.remove("open");
+    }
+  );
+
+  meineSongsModal.addEventListener(
+    "click",
+    function (event) {
+
+      if (event.target === meineSongsModal) {
+        meineSongsModal.classList.remove("open");
+      }
+
+    }
+  );
+
+}

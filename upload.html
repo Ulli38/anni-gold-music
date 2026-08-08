@@ -55,6 +55,15 @@
       </p>
 
     </header>
+    <div class="my-songs-button-wrapper">
+  <button
+    type="button"
+    id="meineSongsButton"
+    class="my-songs-button"
+  >
+    🎵 Meine eingereichten Songs
+  </button>
+</div>
 
     <form id="uploadForm" class="card">
 
@@ -213,7 +222,32 @@
 
     </form>
 
-  </main>
+<div id="meineSongsModal" class="songs-modal">
+
+  <div class="songs-modal-content">
+
+    <button
+      type="button"
+      id="meineSongsSchliessen"
+      class="songs-modal-close"
+      aria-label="Fenster schließen"
+    >
+      ×
+    </button>
+
+    <h2>🎵 Meine eingereichten Songs</h2>
+
+    <div id="meineSongsListe">
+
+      <p>Deine Songs werden geladen...</p>
+
+    </div>
+
+  </div>
+
+</div>
+
+</main>
 
  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
