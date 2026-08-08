@@ -752,7 +752,37 @@ const genre =
             speichernError.message
           );
         }
+try {
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
 
+  if (user) {
+    const { error: historyError } =
+      await supabaseClient
+        .from("song_history")
+        .insert([
+          {
+            user_id: user.id,
+            songtitel: songtitel,
+            live_tag: liveDay,
+            gespielt: false
+          }
+        ]);
+
+    if (historyError) {
+      console.error(
+        "Fehler beim Speichern der Song-Historie:",
+        historyError
+      );
+    }
+  }
+} catch (historyFehler) {
+  console.error(
+    "Song-Historie konnte nicht gespeichert werden:",
+    historyFehler
+  );
+}
 
         statusAnzeigen(
           "✅ Vielen Dank! Dein Song wurde erfolgreich eingereicht.",
