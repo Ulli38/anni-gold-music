@@ -346,7 +346,7 @@ function istLiveTagZeitlichGeschlossen(
     jetztTeile.wochentag >
     liveWochentag
   ) {
-    return true;
+    return false;
   }
 
   if (
