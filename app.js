@@ -341,6 +341,10 @@ function istLiveTagZeitlichGeschlossen(
 
   const liveWochentag =
     liveWochentage[liveTag];
+    // Sonntag: neue Woche erst ab 18:00 Uhr öffnen
+if (jetztTeile.wochentag === 0) {
+  return jetztTeile.stunde < 18;
+}
 
   if (
     jetztTeile.wochentag >
