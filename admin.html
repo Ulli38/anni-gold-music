@@ -457,39 +457,6 @@
             )
           );
         }
-
-        
-        const notizTitel = document.createElement("p");
-        const notizTitelText =
-          document.createElement("strong");
-
-        notizTitelText.textContent = "Admin Notiz:";
-        notizTitel.appendChild(notizTitelText);
-
-        const notizFeld =
-          document.createElement("textarea");
-
-        notizFeld.value = song.admin_note || "";
-        notizFeld.style.width = "100%";
-        notizFeld.style.height = "80px";
-        notizFeld.style.marginBottom = "10px";
-
-        const notizButton =
-          document.createElement("button");
-
-        notizButton.type = "button";
-        notizButton.textContent = "💾 Notiz speichern";
-
-        notizButton.addEventListener(
-          "click",
-          function () {
-            notizSpeichern(
-              song.id,
-              notizFeld.value
-            );
-          }
-        );
-
         const liveButton =
           document.createElement("button");
 
@@ -587,25 +554,7 @@
       await songsLaden();
     }
 
-    async function notizSpeichern(
-      id,
-      notiz
-    ) {
-      const { error } = await supabaseClient
-        .from("Songs")
-        .update({
-          admin_note: notiz
-        })
-        .eq("id", id);
-
-      if (error) {
-        alert("Fehler: " + error.message);
-        return;
-      }
-
-      alert("Notiz gespeichert ✅");
-    }
-
+   
     async function loeschen(id) {
       const sicher = confirm(
         "Song wirklich löschen?"
