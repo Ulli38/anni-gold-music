@@ -136,6 +136,7 @@
 
         const audio = document.createElement("audio");
         audio.controls = true;
+        audio.preload = "none";
         audio.src = song.audio_url;
         audio.style.width = "100%";
         audio.style.marginTop = "15px";
