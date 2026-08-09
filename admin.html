@@ -458,36 +458,7 @@
           );
         }
 
-        const audioBox = document.createElement("div");
-
-        audioBox.style.width = "100%";
-        audioBox.style.marginTop = "25px";
-        audioBox.style.marginBottom = "25px";
-        audioBox.style.background = "#050505";
-        audioBox.style.border = "1px solid #ffd700";
-        audioBox.style.borderRadius = "30px";
-        audioBox.style.boxShadow =
-          "0 0 22px rgba(255,215,0,0.55)";
-        audioBox.style.padding = "8px";
-
-        const audio = document.createElement("audio");
-
-        audio.controls = true;
-        audio.preload = "none"; 
-        audio.src = song.audio_url || "";
-        audio.style.width = "100%";
-        audio.style.filter = "invert(1)";
-        audio.style.borderRadius = "25px";
-
-        audio.addEventListener("ended", function () {
-          statusAendern(
-            song.id,
-            "Bereits gespielt"
-          );
-        });
-
-        audioBox.appendChild(audio);
-
+        
         const notizTitel = document.createElement("p");
         const notizTitelText =
           document.createElement("strong");
@@ -547,36 +518,6 @@
           }
         );
 
-        const gespieltButton =
-          document.createElement("button");
-
-        gespieltButton.type = "button";
-        gespieltButton.textContent =
-          "✅ Bereits gespielt";
-
-        gespieltButton.style.background = "#17a2b8";
-        gespieltButton.style.color = "#ffd700";
-        gespieltButton.style.textShadow =
-          "0 0 20px #ffd700";
-        gespieltButton.style.fontSize = "18px";
-        gespieltButton.style.fontWeight = "bold";
-        gespieltButton.style.border = "none";
-        gespieltButton.style.padding = "12px";
-        gespieltButton.style.borderRadius = "10px";
-        gespieltButton.style.width = "100%";
-        gespieltButton.style.marginTop = "20px";
-        gespieltButton.style.cursor = "pointer";
-
-        gespieltButton.addEventListener(
-          "click",
-          function () {
-            statusAendern(
-              song.id,
-              "Bereits gespielt"
-            );
-          }
-        );
-
         const loeschenButton =
           document.createElement("button");
 
@@ -611,12 +552,10 @@
         card.appendChild(beschreibung);
         card.appendChild(genre);
         card.appendChild(spotify);
-        card.appendChild(audioBox);
         card.appendChild(notizTitel);
         card.appendChild(notizFeld);
         card.appendChild(notizButton);
         card.appendChild(liveButton);
-        card.appendChild(gespieltButton);
         card.appendChild(loeschenButton);
 
         if (song.live_day === "Montag") {
