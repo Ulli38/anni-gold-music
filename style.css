@@ -810,6 +810,17 @@ audio {
 
   .side-ornament {
     display: block !important;
+    width: 70px;
+    z-index: 3;
+    opacity: 0.9;
+  }
+
+  .left-ornament {
+    left: -35px;
+  }
+
+  .right-ornament {
+    right: -35px;
   }
 
   .container {
