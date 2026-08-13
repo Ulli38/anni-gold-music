@@ -148,17 +148,24 @@ if (registerForm) {
           data
         );
 
-        statusAnzeigen(
-          status,
-          "Registrierung erfolgreich ✅ Bitte bestätige gegebenenfalls deine E-Mail-Adresse."
-        );
+      sessionStorage.setItem(
+  "pendingRegistrationEmail",
+  email
+);
 
-        registerForm.reset();
+statusAnzeigen(
+  status,
+  "Registrierung erfolgreich ✅ Wir haben dir einen Bestätigungscode per E-Mail geschickt."
+);
 
-        setTimeout(function () {
-          window.location.href =
-            "login.html";
-        }, 2000);
+const registerCodeBereich =
+  document.getElementById("registerCodeBereich");
+
+if (registerCodeBereich) {
+  registerCodeBereich.hidden = false;
+}
+
+document.getElementById("password").value = "";
 
       } catch (error) {
         console.error(
@@ -816,3 +823,138 @@ async function recoveryCodePruefen() {
 
 window.recoveryCodePruefen =
   recoveryCodePruefen;
+
+  /* =========================================
+   REGISTRIERUNGS-CODE PRÜFEN
+========================================= */
+
+async function registrierungsCodePruefen() {
+
+  const codeElement =
+    document.getElementById("registerCode");
+
+  const status =
+    document.getElementById("status");
+
+  const verifyButton =
+    document.getElementById(
+      "verifyRegisterCodeButton"
+    );
+
+  const email =
+    sessionStorage.getItem(
+      "pendingRegistrationEmail"
+    );
+
+
+  if (!email) {
+
+    statusAnzeigen(
+      status,
+      "Keine offene Registrierung gefunden ❌ Bitte registriere dich erneut."
+    );
+
+    return;
+  }
+
+
+  if (!codeElement) {
+    return;
+  }
+
+
+  const code =
+    codeElement.value.trim();
+
+
+  if (!code) {
+
+    statusAnzeigen(
+      status,
+      "Bitte gib den Bestätigungscode aus der E-Mail ein ❌"
+    );
+
+    return;
+  }
+
+
+  buttonSperren(
+    verifyButton,
+    true
+  );
+
+  statusAnzeigen(
+    status,
+    "Bestätigungscode wird geprüft..."
+  );
+
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.verifyOtp({
+        email: email,
+        token: code,
+        type: "email"
+      });
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    console.log(
+      "E-Mail erfolgreich bestätigt:",
+      data
+    );
+
+
+    sessionStorage.removeItem(
+      "pendingRegistrationEmail"
+    );
+
+
+    statusAnzeigen(
+      status,
+      "E-Mail-Adresse erfolgreich bestätigt ✅ Deine Registrierung ist abgeschlossen."
+    );
+
+
+    await supabaseClient.auth.signOut();
+
+
+    setTimeout(function () {
+
+      window.location.href =
+        "login.html";
+
+    }, 2500);
+
+
+  } catch (error) {
+
+    console.error(
+      "Fehler bei der E-Mail-Bestätigung:",
+      error
+    );
+
+
+    statusAnzeigen(
+      status,
+      "Bestätigungscode ungültig oder abgelaufen ❌ Bitte überprüfe den Code."
+    );
+
+
+    buttonSperren(
+      verifyButton,
+      false
+    );
+
+  }
+
+}
+
+
+window.registrierungsCodePruefen =
+  registrierungsCodePruefen;
