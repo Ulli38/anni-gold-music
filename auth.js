@@ -645,7 +645,11 @@ recoveryPruefen();
           resetStatus,
           "Passwort erfolgreich geändert ✅ Du wirst zur Anmeldung weitergeleitet."
         );
+sessionStorage.removeItem(
+  "passwordRecoveryVerified"
+);
 
+await supabaseClient.auth.signOut();
 
         setTimeout(function () {
 
