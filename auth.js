@@ -649,3 +649,134 @@ if (newPasswordForm) {
   );
 
 }
+/* =========================================
+   RECOVERY-CODE PRÜFEN
+========================================= */
+
+async function recoveryCodePruefen() {
+
+  const emailElement =
+    document.getElementById("email");
+
+  const codeElement =
+    document.getElementById("resetCode");
+
+  const status =
+    document.getElementById("status");
+
+  const verifyButton =
+    document.getElementById("verifyCodeButton");
+
+
+  if (!emailElement || !codeElement) {
+    return;
+  }
+
+
+  const email =
+    emailElement.value.trim();
+
+  const code =
+    codeElement.value.trim();
+
+
+  if (!email) {
+
+    statusAnzeigen(
+      status,
+      "Bitte gib zuerst deine E-Mail-Adresse ein ❌"
+    );
+
+    return;
+  }
+
+
+  if (!code) {
+
+    statusAnzeigen(
+      status,
+      "Bitte gib den Code aus der E-Mail ein ❌"
+    );
+
+    return;
+  }
+
+
+  buttonSperren(
+    verifyButton,
+    true
+  );
+
+  statusAnzeigen(
+    status,
+    "Code wird geprüft..."
+  );
+
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.verifyOtp({
+        email: email,
+        token: code,
+        type: "recovery"
+      });
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    console.log(
+      "Recovery-Code erfolgreich bestätigt:",
+      data
+    );
+
+
+    sessionStorage.setItem(
+      "passwordRecoveryVerified",
+      "true"
+    );
+
+
+    statusAnzeigen(
+      status,
+      "Code bestätigt ✅ Du wirst weitergeleitet..."
+    );
+
+
+    setTimeout(function () {
+
+      window.location.href =
+        "new-password.html";
+
+    }, 1000);
+
+
+  } catch (error) {
+
+    console.error(
+      "Fehler beim Prüfen des Recovery-Codes:",
+      error
+    );
+
+
+    statusAnzeigen(
+      status,
+      "Code ungültig oder abgelaufen ❌ Bitte fordere gegebenenfalls einen neuen Code an."
+    );
+
+
+    buttonSperren(
+      verifyButton,
+      false
+    );
+
+  }
+
+}
+
+
+window.recoveryCodePruefen =
+  recoveryCodePruefen;
