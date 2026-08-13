@@ -422,10 +422,17 @@ async function passwortResetSenden() {
       throw error;
     }
 
-    statusAnzeigen(
-      status,
-      "Reset-Link wurde gesendet ✅ Bitte prüfe dein E-Mail-Postfach."
-    );
+   statusAnzeigen(
+  status,
+  "Code wurde gesendet ✅ Bitte prüfe dein E-Mail-Postfach."
+);
+
+const codeBereich =
+  document.getElementById("codeBereich");
+
+if (codeBereich) {
+  codeBereich.hidden = false;
+}
 
   } catch (error) {
     console.error(
