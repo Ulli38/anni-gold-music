@@ -542,32 +542,6 @@ if (newPasswordForm) {
     }
   );
 
-
-  supabaseClient.auth
-    .getSession()
-    .then(function ({ data, error }) {
-
-      if (error) {
-        console.error(
-          "Fehler beim Prüfen des Reset-Links:",
-          error
-        );
-
-        statusAnzeigen(
-          resetStatus,
-          "Reset-Link konnte nicht geprüft werden ❌"
-        );
-
-        return;
-      }
-
-      if (data.session) {
-        resetFormFreigeben();
-      }
-
-    });
-
-
   newPasswordForm.addEventListener(
     "submit",
     async function (event) {
