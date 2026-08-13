@@ -63,7 +63,30 @@
       >
         Link zum Zurücksetzen senden
       </button>
+      
+<div id="codeBereich" hidden>
 
+  <label for="resetCode">
+    Bestätigungscode
+  </label>
+
+  <input
+    type="text"
+    id="resetCode"
+    placeholder="Code aus der E-Mail eingeben"
+    autocomplete="one-time-code"
+    required
+  >
+
+  <button
+    type="button"
+    id="verifyCodeButton"
+    onclick="recoveryCodePruefen()"
+  >
+    Code bestätigen
+  </button>
+
+</div>
       <p class="form-link">
         <a href="login.html">
           ← Zur Anmeldung
