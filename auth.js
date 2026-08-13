@@ -531,7 +531,7 @@ if (newPasswordForm) {
 
     statusAnzeigen(
       resetStatus,
-      "Reset-Link gültig ✅ Du kannst jetzt ein neues Passwort festlegen."
+      "Code bestätigt ✅ Du kannst jetzt ein neues Passwort festlegen."
     );
   }
 
