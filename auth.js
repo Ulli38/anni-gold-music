@@ -414,7 +414,7 @@ async function passwortResetSenden() {
           email,
           {
             redirectTo:
-              appUrl + "/reset.html"
+              appUrl + "/new-password.html"
           }
         );
 
@@ -475,4 +475,196 @@ if (forgotPasswordForm) {
       await passwortResetSenden();
     }
   );
+}
+/* =========================================
+   NEUES PASSWORT SPEICHERN
+========================================= */
+
+function togglePassword(inputId, element) {
+  const input =
+    document.getElementById(inputId);
+
+  if (!input) {
+    return;
+  }
+
+  if (input.type === "password") {
+    input.type = "text";
+    element.textContent = "🙈";
+  } else {
+    input.type = "password";
+    element.textContent = "👁";
+  }
+}
+
+window.togglePassword = togglePassword;
+
+
+const newPasswordForm =
+  document.getElementById("newPasswordForm");
+
+if (newPasswordForm) {
+
+  const newPasswordInput =
+    document.getElementById("newPassword");
+
+  const confirmPasswordInput =
+    document.getElementById("confirmPassword");
+
+  const savePasswordButton =
+    document.getElementById("savePasswordButton");
+
+  const resetStatus =
+    document.getElementById("status");
+
+
+  function resetFormFreigeben() {
+
+    savePasswordButton.disabled = false;
+
+    statusAnzeigen(
+      resetStatus,
+      "Reset-Link gültig ✅ Du kannst jetzt ein neues Passwort festlegen."
+    );
+  }
+
+
+  supabaseClient.auth.onAuthStateChange(
+    function (event, session) {
+
+      if (
+        event === "PASSWORD_RECOVERY" &&
+        session
+      ) {
+        resetFormFreigeben();
+      }
+
+    }
+  );
+
+
+  supabaseClient.auth
+    .getSession()
+    .then(function ({ data, error }) {
+
+      if (error) {
+        console.error(
+          "Fehler beim Prüfen des Reset-Links:",
+          error
+        );
+
+        statusAnzeigen(
+          resetStatus,
+          "Reset-Link konnte nicht geprüft werden ❌"
+        );
+
+        return;
+      }
+
+      if (data.session) {
+        resetFormFreigeben();
+      }
+
+    });
+
+
+  newPasswordForm.addEventListener(
+    "submit",
+    async function (event) {
+
+      event.preventDefault();
+
+      const newPassword =
+        newPasswordInput.value;
+
+      const confirmPassword =
+        confirmPasswordInput.value;
+
+
+      if (newPassword.length < 6) {
+
+        statusAnzeigen(
+          resetStatus,
+          "Das Passwort muss mindestens 6 Zeichen lang sein ❌"
+        );
+
+        return;
+      }
+
+
+      if (
+        newPassword !== confirmPassword
+      ) {
+
+        statusAnzeigen(
+          resetStatus,
+          "Die beiden Passwörter stimmen nicht überein ❌"
+        );
+
+        return;
+      }
+
+
+      buttonSperren(
+        savePasswordButton,
+        true
+      );
+
+      statusAnzeigen(
+        resetStatus,
+        "Neues Passwort wird gespeichert..."
+      );
+
+
+      try {
+
+        const { error } =
+          await supabaseClient.auth
+            .updateUser({
+              password: newPassword
+            });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        statusAnzeigen(
+          resetStatus,
+          "Passwort erfolgreich geändert ✅ Du wirst zur Anmeldung weitergeleitet."
+        );
+
+
+        setTimeout(function () {
+
+          window.location.href =
+            "login.html";
+
+        }, 2500);
+
+
+      } catch (error) {
+
+        console.error(
+          "Fehler beim Speichern des Passworts:",
+          error
+        );
+
+        statusAnzeigen(
+          resetStatus,
+          "Passwort konnte nicht geändert werden ❌ " +
+          error.message
+        );
+
+        buttonSperren(
+          savePasswordButton,
+          false
+        );
+
+      }
+
+    }
+  );
+
 }
