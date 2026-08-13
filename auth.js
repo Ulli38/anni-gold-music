@@ -536,18 +536,48 @@ if (newPasswordForm) {
   }
 
 
-  supabaseClient.auth.onAuthStateChange(
-    function (event, session) {
+async function recoveryPruefen() {
 
-      if (
-        event === "PASSWORD_RECOVERY" &&
-        session
-      ) {
-        resetFormFreigeben();
-      }
+  const recoveryVerified =
+    sessionStorage.getItem(
+      "passwordRecoveryVerified"
+    );
 
-    }
-  );
+  if (recoveryVerified !== "true") {
+
+    statusAnzeigen(
+      resetStatus,
+      "Bitte bestätige zuerst den Code aus deiner E-Mail."
+    );
+
+    return;
+  }
+
+
+  const { data, error } =
+    await supabaseClient.auth.getSession();
+
+
+  if (error || !data.session) {
+
+    sessionStorage.removeItem(
+      "passwordRecoveryVerified"
+    );
+
+    statusAnzeigen(
+      resetStatus,
+      "Die Passwort-Zurücksetzung ist nicht mehr gültig ❌ Bitte fordere einen neuen Code an."
+    );
+
+    return;
+  }
+
+
+  resetFormFreigeben();
+}
+
+
+recoveryPruefen();
 
   newPasswordForm.addEventListener(
     "submit",
