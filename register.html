@@ -157,6 +157,29 @@
         Registrieren
       </button>
 
+      <div id="registerCodeBereich" hidden>
+
+  <label for="registerCode">
+    Bestätigungscode
+  </label>
+
+  <input
+    type="text"
+    id="registerCode"
+    placeholder="Code aus der E-Mail eingeben"
+    autocomplete="one-time-code"
+  >
+
+  <button
+    type="button"
+    id="verifyRegisterCodeButton"
+    onclick="registrierungsCodePruefen()"
+  >
+    E-Mail-Adresse bestätigen
+  </button>
+
+</div>
+
       <p class="form-link">
         Bereits registriert?
         <a href="login.html">
