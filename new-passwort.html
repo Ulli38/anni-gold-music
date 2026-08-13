@@ -1,115 +1,195 @@
-<img
-src="assets/assets/music-ornament.png"
-class="side-ornament left-ornament"
-alt=""
+<!DOCTYPE html>
+<html lang="de">
 
+<head>
+  <meta charset="UTF-8">
 
-
-
-<img
-src="assets/assets/music-ornament.png"
-class="side-ornament right-ornament"
-alt=""
-
-
-
-
-<form id="newPasswordForm" class="card">
-
-  <div class="logo-container">
-    <img
-      src="assets/assets/anni-logo.png"
-      alt="ANNI GOLD MUSIC"
-      class="anni-logo"
-    >
-  </div>
-
-  <h1>
-    <span class="gold-icon">🔑</span>
-    Neues Passwort
-  </h1>
-
-  <p>
-    Gib dein neues Passwort zweimal ein.
-  </p>
-
-  <label for="newPassword">
-    Neues Passwort
-  </label>
-
-  <div class="password-box">
-
-    <input
-      type="password"
-      id="newPassword"
-      placeholder="Neues Passwort eingeben"
-      autocomplete="new-password"
-      minlength="6"
-      required
-    >
-
-    <span
-      class="toggle-password"
-      onclick="togglePassword('newPassword', this)"
-    >
-      👁
-    </span>
-
-  </div>
-
-  <label for="confirmPassword">
-    Passwort wiederholen
-  </label>
-
-  <div class="password-box">
-
-    <input
-      type="password"
-      id="confirmPassword"
-      placeholder="Passwort erneut eingeben"
-      autocomplete="new-password"
-      minlength="6"
-      required
-    >
-
-    <span
-      class="toggle-password"
-      onclick="togglePassword('confirmPassword', this)"
-    >
-      👁
-    </span>
-
-  </div>
-
-  <button
-    type="submit"
-    id="savePasswordButton"
-    disabled
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
   >
-    Neues Passwort speichern
-  </button>
 
-  <div
-    id="status"
-    class="status"
-    aria-live="polite"
+  <title>Neues Passwort | ANNI GOLD MUSIC</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css?v=4"
   >
-    Reset-Link wird geprüft ...
-  </div>
 
-  <p class="form-link">
-    <a href="login.html">
-      ← Zur Anmeldung
-    </a>
-  </p>
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
 
-</form>
-<p>© 2026 ANNI GOLD MUSIC</p>
+  <meta
+    name="theme-color"
+    content="#d4af37"
+  >
+</head>
 
-<div>
-  <a href="agb.html">AGB</a>
-  <span>•</span>
-  <a href="datenschutz.html">Datenschutz</a>
-  <span>•</span>
-  <a href="impressum.html">Impressum</a>
-</div>
+
+<body>
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament left-ornament"
+    alt=""
+  >
+
+  <img
+    src="assets/assets/music-ornament.png"
+    class="side-ornament right-ornament"
+    alt=""
+  >
+
+
+  <main class="container">
+
+    <form
+      id="newPasswordForm"
+      class="card"
+    >
+
+      <div class="logo-container">
+
+        <img
+          src="assets/assets/anni-logo.png"
+          alt="ANNI GOLD MUSIC"
+          class="anni-logo"
+        >
+
+      </div>
+
+
+      <h1>
+        <span class="gold-icon">🔑</span>
+        Neues Passwort
+      </h1>
+
+
+      <p>
+        Gib dein neues Passwort zweimal ein.
+      </p>
+
+
+      <label for="newPassword">
+        Neues Passwort
+      </label>
+
+
+      <div class="password-box">
+
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="Neues Passwort eingeben"
+          autocomplete="new-password"
+          minlength="6"
+          required
+        >
+
+        <span
+          class="toggle-password"
+          onclick="togglePassword('newPassword', this)"
+        >
+          👁
+        </span>
+
+      </div>
+
+
+      <label for="confirmPassword">
+        Passwort wiederholen
+      </label>
+
+
+      <div class="password-box">
+
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Passwort erneut eingeben"
+          autocomplete="new-password"
+          minlength="6"
+          required
+        >
+
+        <span
+          class="toggle-password"
+          onclick="togglePassword('confirmPassword', this)"
+        >
+          👁
+        </span>
+
+      </div>
+
+
+      <button
+        type="submit"
+        id="savePasswordButton"
+        disabled
+      >
+        Neues Passwort speichern
+      </button>
+
+
+      <div
+        id="status"
+        class="status"
+        aria-live="polite"
+      >
+        Reset-Link wird geprüft ...
+      </div>
+
+
+      <p class="form-link">
+
+        <a href="login.html">
+          ← Zur Anmeldung
+        </a>
+
+      </p>
+
+    </form>
+
+  </main>
+
+
+  <footer class="footer-links">
+
+    <p>
+      © 2026 ANNI GOLD MUSIC
+    </p>
+
+    <div>
+
+      <a href="agb.html">
+        AGB
+      </a>
+
+      <span>•</span>
+
+      <a href="datenschutz.html">
+        Datenschutz
+      </a>
+
+      <span>•</span>
+
+      <a href="impressum.html">
+        Impressum
+      </a>
+
+    </div>
+
+  </footer>
+
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script src="auth.js"></script>
+
+</body>
+
+</html>
