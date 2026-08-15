@@ -8,6 +8,16 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
+async function sessionPruefen() {
+  const { data, error } =
+    await supabaseClient.auth.getSession();
+
+  if (error || !data.session) {
+    window.location.href = "login.html";
+    return;
+  }
+}
+sessionPruefen();
 
 const LIVE_TAGE = [
   "Montag",

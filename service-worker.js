@@ -3,7 +3,6 @@ const CACHE_NAME = "anni-gold-music-v7";
 const APP_DATEIEN = [
   "./",
   "./index.html",
-  "./community.html",
   "./login.html",
   "./register.html",
   "./reset.html",
