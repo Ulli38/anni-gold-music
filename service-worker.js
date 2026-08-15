@@ -1,4 +1,4 @@
-const CACHE_NAME = "anni-gold-music-v7";
+const CACHE_NAME = "anni-gold-music-v8";
 
 const APP_DATEIEN = [
   "./",
@@ -16,7 +16,6 @@ const APP_DATEIEN = [
   "./style.css",
   "./auth.js",
   "./app.js",
-  "./community.js",
   "./pwa.js",
   "./manifest.json",
   "./assets/assets/anni-logo.png",
