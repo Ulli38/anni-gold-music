@@ -550,29 +550,94 @@
 
       await songsLaden();
     }
+async function loeschen(id) {
+  const sicher = confirm(
+    "Song wirklich löschen?"
+  );
 
-   
-    async function loeschen(id) {
-      const sicher = confirm(
-        "Song wirklich löschen?"
+  if (!sicher) {
+    return;
+  }
+
+  // 1. Zuerst die Audio-URL des Songs holen
+  const {
+    data: song,
+    error: songFehler
+  } = await supabaseClient
+    .from("Songs")
+    .select("audio_url")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (songFehler) {
+    alert(
+      "Fehler beim Laden des Songs: " +
+      songFehler.message
+    );
+    return;
+  }
+
+  // 2. MP3 aus dem Storage löschen
+  if (song && song.audio_url) {
+    try {
+      const url = new URL(song.audio_url);
+
+      const marker =
+        "/storage/v1/object/public/Songs/";
+
+      const position =
+        url.pathname.indexOf(marker);
+
+      if (position !== -1) {
+        const filePath =
+          decodeURIComponent(
+            url.pathname.substring(
+              position + marker.length
+            )
+          );
+
+        const {
+          error: storageFehler
+        } = await supabaseClient
+          .storage
+          .from("Songs")
+          .remove([filePath]);
+
+        if (storageFehler) {
+          alert(
+            "Die MP3 konnte nicht gelöscht werden: " +
+            storageFehler.message
+          );
+          return;
+        }
+      }
+    } catch (error) {
+      alert(
+        "Die Audio-Datei konnte nicht verarbeitet werden."
       );
-
-      if (!sicher) {
-        return;
-      }
-
-      const { error } = await supabaseClient
-        .from("Songs")
-        .delete()
-        .eq("id", id);
-
-      if (error) {
-        alert("Fehler: " + error.message);
-        return;
-      }
-
-      await songsLaden();
+      console.error(error);
+      return;
     }
+  }
+
+  // 3. Erst danach den Datenbankeintrag löschen
+  const {
+    error
+  } = await supabaseClient
+    .from("Songs")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert(
+      "Fehler: " + error.message
+    );
+    return;
+  }
+
+  await songsLaden();
+}    
+
     async function adminCodePruefen() {
   const code = document.getElementById(
     "adminCodeInput"
