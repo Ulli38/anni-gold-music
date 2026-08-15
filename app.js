@@ -483,6 +483,17 @@ if (
     async function (event) {
       event.preventDefault();
 
+      const rightsConfirmed =
+  document.getElementById("rightsConfirmed");
+
+if (!rightsConfirmed || !rightsConfirmed.checked) {
+  statusAnzeigen(
+    statusElement,
+    "Bitte bestätige zuerst, dass du über die erforderlichen Nutzungs- und Veröffentlichungsrechte verfügst ❌"
+  );
+
+  return;
+}
       const kuenstlername =
         kuenstlernameInput
           ? kuenstlernameInput.value.trim()
@@ -750,6 +761,8 @@ const genre =
           audio_url:
             publicUrl,
 
+           rights_confirmed: true,
+            
           status:
             "Neue Songs"
         };

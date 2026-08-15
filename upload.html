@@ -211,10 +211,32 @@
         id="spotifyLink"
         placeholder="https://open.spotify.com/track/..."
       >
+<label class="checkbox-label rights-confirmation">
+  <input
+    type="checkbox"
+    id="rightsConfirmed"
+    required
+  >
 
-      <button type="submit">
-        Song einreichen
-      </button>
+  <span>
+    Ich bestätige, dass ich für diesen Song über alle erforderlichen
+    Nutzungs- und Veröffentlichungsrechte verfüge und die Lizenzbedingungen
+    der verwendeten KI-, Musik- oder Produktionsplattform geprüft habe.
+    Songs, die nur für private, persönliche oder nicht-kommerzielle Nutzung
+    freigegeben sind, dürfen nicht eingereicht werden.
+  </span>
+</label>
+
+<p class="rights-note">
+  <strong>Wichtig:</strong>
+  Kostenlose Tarife erlauben nicht automatisch eine öffentliche Nutzung.
+  Bitte prüfe vor der Einreichung die Lizenzbedingungen des verwendeten Anbieters.
+</p>
+
+<button type="submit">
+  Song einreichen
+</button>
+
 
       <div id="status" class="status"></div>
 
